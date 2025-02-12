@@ -1,0 +1,44 @@
+<mat-toolbar>
+    <span>Wroth Flames Party List Sim</span>
+</mat-toolbar>
+
+<!-- To-do: Section to show correct lineup, player name input, save player names (local storage), save order (local storage) -->
+<mat-card appearance="outlined" class="party-container">
+    <mat-card-header>
+        <mat-card-title class="party-list-header">FULL PARTY</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content cdkDropListGroup>
+        <div cdkDropList
+        [cdkDropListData]="playerData"
+        (cdkDropListDropped)="drop($event)"
+        class="party-list">
+        @for (player of playerData; track player; let index = $index) {
+            <div class="player-row" cdkDrag>
+                <span class="job">
+                    <img class="job" [src]="'/assets/job/'+ player.job +'.png'" />
+                    <span class="bar aggro"></span>
+                    <span class="bar health"></span>
+                    <span class="bar mana"></span>
+                </span>
+                <span class="order">{{index+1}}</span>
+                <img class="umm" src="/assets/misc/umm.png" />
+
+                <span class="level">Lv{{player.level}}</span>
+
+                <span class="player">{{player.name}}</span>
+
+                <span *ngFor="let debuff of player.debuffs" class="debuffs">
+                    <img class="debuff" [src]="debuff.iconUrl" />
+                    <span class="duration">{{debuff.duration}}</span>
+                </span>
+            </div>
+        }
+        </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+        <button mat-button>Show lineup</button>
+        <button mat-button>Randomize debuffs</button>
+    </mat-card-actions>
+</mat-card>
