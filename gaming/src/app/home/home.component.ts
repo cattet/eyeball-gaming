@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import {MatGridListModule} from '@angular/material/grid-list';
 import {
   CdkDragDrop,
   CdkDrag,
@@ -28,7 +29,7 @@ export interface debuff {
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, MatCardModule, MatToolbarModule, MatButtonModule, CdkDropListGroup, CdkDropList, CdkDrag ],
+  imports: [CommonModule, MatGridListModule, MatCardModule, MatToolbarModule, MatButtonModule, CdkDropListGroup, CdkDropList, CdkDrag ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })

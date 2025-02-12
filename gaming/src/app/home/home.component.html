@@ -1,9 +1,16 @@
 <mat-toolbar>
     <span>Wroth Flames Party List Sim</span>
+
+    <span class="filler"></span>
+
+    <span>
+        <button mat-button>Randomize debuffs</button>
+    </span>
 </mat-toolbar>
 
+<div class="page">
 <!-- To-do: Section to show correct lineup, player name input, save player names (local storage), save order (local storage) -->
-<mat-card appearance="outlined" class="party-container">
+<mat-card class="party-container">
     <mat-card-header>
         <mat-card-title class="party-list-header">FULL PARTY</mat-card-title>
     </mat-card-header>
@@ -36,9 +43,12 @@
         }
         </div>
     </mat-card-content>
-
-    <mat-card-actions>
-        <button mat-button>Show lineup</button>
-        <button mat-button>Randomize debuffs</button>
-    </mat-card-actions>
 </mat-card>
+<mat-card class="lineup-container">
+    <mat-card-content>
+        <div class="lineup">
+            Show party lineup
+        </div>
+    </mat-card-content>
+</mat-card>
+</div>

@@ -1,6 +1,7 @@
-body {
-    text-align: center;
+.filler {
+    flex: 1 1 auto;
 }
+
 
 .party-list-header {
     display: block;
@@ -17,13 +18,38 @@ body {
     padding: 0;
 }
 
+.page {
+    margin: 40px;
+    display: flex;
+}
+
 .party-container {
-    max-width: 450px;
-    margin: 40px auto;
+    display: inline-block;
+    width: 450px;
+    min-width: 450px;
+    height: 530px;
     border: none;
 
     background: rgb(255,255,255);
     background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(0,0,0,1) 45%, rgba(0,0,0,1) 55%, rgba(255,255,255,0) 100%); 
+}
+
+.lineup-container {
+    display: inline-block;
+    flex-grow: 1;
+    width: auto;
+    height: 530px;
+    margin-left: 20px;
+    background: none;
+    border: solid 1px var(--mat-sys-background); 
+    text-align: center;
+}
+
+.lineup {
+    position: relative;
+    top: 230px;
+    font-style: italic;
+    opacity: 0.25;
 }
 
 .party-list {
