@@ -4,12 +4,12 @@
     <span class="filler"></span>
 
     <span>
-        <button mat-button (click)="assignSpots()">Randomize debuffs</button>
+        <button mat-button>Github</button>
     </span>
 </mat-toolbar>
 
 <div class="page">
-<!-- To-do: Section to show correct lineup, player name input, save player names (local storage), save order (local storage) -->
+<!-- To-do: Player name input, save player names (local storage), save order (local storage) -->
 <mat-card class="party-container">
     <mat-card-header>
         <mat-card-title class="party-list-header glow">FULL PARTY</mat-card-title>
@@ -17,10 +17,10 @@
 
     <mat-card-content cdkDropListGroup>
         <div cdkDropList
-        [cdkDropListData]="playerData"
+        [cdkDropListData]="partyList"
         (cdkDropListDropped)="drop($event)"
         class="party-list">
-        @for (player of playerData; track player; let index = $index) {
+        @for (player of partyList; track player; let index = $index) {
             <div class="player-row" cdkDrag>
                 <span class="job">
                     <img class="job" [src]="'/assets/job/'+ player.job +'.png'" />
@@ -94,9 +94,24 @@
                 </tr>
             </table>
         </div>
-        <div class="lineup-cover">
-            <div><button mat-button>Show party lineup</button></div>
+        <div class="lineup-cover" *ngIf="!showAnswer">
+            <div>Party lineup</div>
         </div>
     </mat-card-content>
 </mat-card>
 </div>
+<mat-toolbar class="actions-toolbar">
+    <span class="filler"></span>
+    <button mat-fab extended (click)="shuffleDebuffs()">
+        <mat-icon>refresh</mat-icon>
+        Randomize debuffs
+    </button>
+    <button mat-fab extended *ngIf="!showAnswer" (click)="showAnswer = !showAnswer">
+        <mat-icon>visibility</mat-icon>
+        Show party lineup
+    </button>
+    <button mat-fab extended *ngIf="showAnswer" (click)="showAnswer = !showAnswer">
+        <mat-icon>visibility_off</mat-icon>
+        Hide party lineup
+    </button>
+</mat-toolbar>
