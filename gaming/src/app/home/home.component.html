@@ -106,3 +106,13 @@
     </button>
     <mat-slide-toggle (click)="showAnswer = !showAnswer">Show party lineup</mat-slide-toggle>
 </mat-toolbar>
+<mat-expansion-panel [expanded]="showLogs" (expandedChange)="saveDebugPanelState($event)" class="debug-panel">
+    <mat-expansion-panel-header>
+        <mat-panel-title> Debug </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="debug-messages">
+    @for (log of logs; track log) {
+        <p>{{log}}</p>
+    }
+    </div> 
+</mat-expansion-panel>

@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { xivNumberPipe } from './pipes/xivnumber.pipe';
 import { xivDecimalPipe } from './pipes/xivdecimal.pipe';
 import {
@@ -17,6 +18,7 @@ import {
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
+import { LocalStorageService } from '../services/local-storage.service';
 
 export interface player {
   id: number;
@@ -40,7 +42,11 @@ export interface debuff {
   duration: string;
 }
 
-const basePlayerData: player[] = [
+const LOCALSTORAGEKEYS = {
+  'debugExpanded': 'debug-expanded',
+  'partyListOrder': 'user-party-list-order'
+};
+const BASEPLAYERDATA: player[] = [
   { id: 0, job: 'MCH', level: 90, name: 'Range Group1', maxHealth: 66791, healthPercent: 1, manaPercent: 1, aggroPercent: 0.2, aggroOrder: 6, jobPriority: 2, groupPriority: 2, lineUpOrder: 0, debuffs: [] },
   { id: 1, job: 'WAR', level: 90, name: 'Tank Group1', maxHealth: 94171, healthPercent: 0.8, manaPercent: 1, aggroPercent: 0.8, aggroOrder: 2, jobPriority: 4, groupPriority: 2, lineUpOrder: 0, debuffs: [] },
   { id: 2, job: 'PLD', level: 90, name: 'Tank Group2', maxHealth: 96236, healthPercent: 0.65, manaPercent: 1, aggroPercent: 1, aggroOrder: 1, jobPriority: 4, groupPriority: 1, lineUpOrder: 0, debuffs: [] },
@@ -53,11 +59,12 @@ const basePlayerData: player[] = [
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, MatGridListModule, MatCardModule, MatToolbarModule, MatButtonModule, MatSlideToggleModule, MatIconModule, MatProgressBarModule, CdkDropListGroup, CdkDropList, CdkDrag, xivNumberPipe, xivDecimalPipe ],
+  imports: [CommonModule, MatGridListModule, MatCardModule, MatToolbarModule, MatButtonModule, MatSlideToggleModule, MatIconModule, MatProgressBarModule, MatExpansionModule, CdkDropListGroup, CdkDropList, CdkDrag, xivNumberPipe, xivDecimalPipe ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
+  constructor(private localStorageService: LocalStorageService){}
 
   public wrothDebuffs: debuff[] = [
     {id: 0, name: 'spread', iconUrl: 'assets/spread.png', duration: '23' },
@@ -76,8 +83,11 @@ export class HomeComponent implements OnInit {
   public partyList: player[] = [];
   public solvedPlayers: player[] = [];
   public showAnswer: boolean = false;
+  public showLogs: boolean = false;
+  public logs: string[] = [];
 
   ngOnInit() {
+    this.loadDebugPanelState();
     this.shuffleDebuffs();
   }
 
@@ -87,8 +97,21 @@ export class HomeComponent implements OnInit {
   }
 
   assignDebuffs(): void {
-    // Get a fresh copy of player data
-    this.partyList = this.clone(basePlayerData);
+    // Clean out the debuffs
+    if(!this.partyList.length) {
+      var savedOrder: number[] | null = this.getPartyListOrder();
+      if(savedOrder) {
+        savedOrder.forEach((id, index) => {
+          // Reorder based on player preferences in local storage
+          this.partyList[index] = this.clone(BASEPLAYERDATA.find((p: player) => p.id == id));
+        })
+      } else {
+        // Get a straight fresh clone of the base data
+        this.partyList = this.clone(BASEPLAYERDATA);
+      }
+    }
+    this.partyList.forEach(p => { p.debuffs = []});
+
     var workingPlayerIds: number[] = this.partyList.map(p => p.id);
    
     this.wrothDebuffs.forEach(debuff => {
@@ -123,8 +146,6 @@ export class HomeComponent implements OnInit {
     this.solvedPlayers.push(nothingPlayers[0]);
     this.solvedPlayers.push(stackPlayers[1]);
     this.solvedPlayers.push(nothingPlayers[1]);
-
-    console.log(this.solvedPlayers);
   }
 
   drop(event: CdkDragDrop<player[]>) {
@@ -138,6 +159,8 @@ export class HomeComponent implements OnInit {
         event.currentIndex,
       );
     }
+
+    this.savePartyListOrder();
   }
 
   sortPlayersByPriority(players: player[]): player[] {
@@ -150,8 +173,61 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  log(debugMessage: string): void {
+    var timestamp: string = this.formatTimestamp(new Date());
+    this.logs.push(`${timestamp}: ${debugMessage}`);
+  }
+
+
+
+
+  saveDebugPanelState(expanded: boolean): void {
+    this.localStorageService.setItem(LOCALSTORAGEKEYS.debugExpanded, expanded);
+    this.log('Debug panel state saved. ' + expanded);
+  }
+  loadDebugPanelState(): void {
+    const debugExpanded: boolean | null = this.localStorageService.getItem<boolean>(
+      LOCALSTORAGEKEYS.debugExpanded
+    );
+    if(debugExpanded){
+      this.showLogs = debugExpanded;
+    } else {
+      this.showLogs = false;
+    }
+  }
+  savePartyListOrder(): void {
+    const partyListOrder: number[] = this.partyList.map(p => p.id);
+    const jobList: string[] = this.partyList.map(p => p.job);
+
+    this.localStorageService.setItem(LOCALSTORAGEKEYS.partyListOrder, partyListOrder);
+    this.log('New party list order saved. ' + jobList.toString());
+  }
+
+  getPartyListOrder(): number[] | null {
+    const partyListOrder: number[] | null = this.localStorageService.getItem<number[]>(
+      LOCALSTORAGEKEYS.partyListOrder
+    );
+    return partyListOrder;
+  }
+
   clone(arrayToClone: any): any {
     return JSON.parse(JSON.stringify(arrayToClone)) as typeof arrayToClone;
   }
-
+  convertTo2Digits(newNum: number) {
+    return newNum.toString().padStart(2, '0');
+  }
+  formatTimestamp(timestamp: Date) {
+    return (
+        [
+          timestamp.getFullYear(),
+          this.convertTo2Digits(timestamp.getMonth() + 1),
+          this.convertTo2Digits(timestamp.getDate()),
+        ].join('-') + ' ' +
+        [
+          this.convertTo2Digits(timestamp.getHours()),
+          this.convertTo2Digits(timestamp.getMinutes()),
+          this.convertTo2Digits(timestamp.getSeconds()),
+        ].join(':')
+      );
+  }
 }

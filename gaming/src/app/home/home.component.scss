@@ -19,11 +19,27 @@
 }
 .actions-toolbar {
     background: none;
-    padding-right: 45px;
+    padding: 0 45px 0 70px;
 }
 .actions-toolbar button {
-    margin-right: 20px;
+    margin: 0 20px;
 }
+.debug-panel {
+    margin: 70px 40px 0 70px;
+}
+.debug-messages {
+    font-family: 'Consolas', Courier, monospace;
+    font-size: smaller;
+    height: 140px;
+    max-height: 140px;
+    overflow: scroll;
+    opacity: 0.5;
+}
+.debug-messages p {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
 .party-lineup-toggle {
     width: 180px;
 }
