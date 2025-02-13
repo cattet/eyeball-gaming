@@ -1,10 +1,10 @@
 <mat-toolbar>
-    <span>Wroth Flames Party List Sim</span>
+    <span class="title">Wroth Flames Party List Sim</span>
 
     <span class="filler"></span>
 
     <span>
-        <button mat-button>Randomize debuffs</button>
+        <button mat-button (click)="assignSpots()">Randomize debuffs</button>
     </span>
 </mat-toolbar>
 
@@ -12,7 +12,7 @@
 <!-- To-do: Section to show correct lineup, player name input, save player names (local storage), save order (local storage) -->
 <mat-card class="party-container">
     <mat-card-header>
-        <mat-card-title class="party-list-header">FULL PARTY</mat-card-title>
+        <mat-card-title class="party-list-header glow">FULL PARTY</mat-card-title>
     </mat-card-header>
 
     <mat-card-content cdkDropListGroup>
@@ -24,16 +24,26 @@
             <div class="player-row" cdkDrag>
                 <span class="job">
                     <img class="job" [src]="'/assets/job/'+ player.job +'.png'" />
-                    <span class="bar aggro"></span>
-                    <span class="bar health"></span>
-                    <span class="bar mana"></span>
+                    <span class="bar aggro" [class]="{'first': player.aggroOrder==1, 'second': player.aggroOrder==2}">
+                        <mat-progress-bar mode="determinate" [value]="player.aggroPercent*100" class="fill"></mat-progress-bar>
+                    </span>
+                    <span class="bar health"><mat-progress-bar mode="determinate" [value]="player.healthPercent*100" class="fill"></mat-progress-bar></span>
+                    <span class="bar mana"><mat-progress-bar mode="determinate" [value]="player.manaPercent*100" class="fill"></mat-progress-bar></span>
+                    <span class="aggro glow-shadow">
+                        <span *ngIf="player.aggroOrder > 1">{{player.aggroOrder}}</span>
+                        <span class="aggro-a" *ngIf="player.aggroOrder == 1">A</span>
+                    </span>
+                    <span class="health-triangle glow-shadow" *ngIf="player.healthPercent < 1">🞃</span>
+                    <span class="health glow-shadow">{{player.healthPercent * player.maxHealth | number:'1.0-0' | xivNumber}}</span>
+                    <span class="mana glow-shadow">{{player.manaPercent * 100 | number:'1.0-0' | xivNumber}}</span>
+                    <span class="mana-decimal glow-shadow">{{ player.manaPercent * 100 | number:'1.2-2' | xivDecimal }}</span>
                 </span>
                 <span class="order">{{index+1}}</span>
-                <img class="umm" src="/assets/misc/umm.png" />
+                <img class="sync" src="/assets/misc/umm.png" />
 
-                <span class="level">Lv{{player.level}}</span>
+                <span class="level glow-shadow">Lv{{player.level}}</span>
 
-                <span class="player">{{player.name}}</span>
+                <span class="player glow-shadow">{{player.name}}</span>
 
                 <span *ngFor="let debuff of player.debuffs" class="debuffs">
                     <img class="debuff" [src]="debuff.iconUrl" />
@@ -47,7 +57,45 @@
 <mat-card class="lineup-container">
     <mat-card-content>
         <div class="lineup">
-            Show party lineup
+            <table>
+                <tr>
+                    <td>
+                        <div class="aoe spread">
+                            <img class="job" [src]="'/assets/job/'+ solvedPlayers[0].job +'.png'" />
+                        </div>
+                    </td>
+                    <td>
+                        <div class="aoe spread">
+                            <img class="job" [src]="'/assets/job/'+ solvedPlayers[1].job +'.png'" />
+                        </div>
+                    </td>
+                    <td>
+                        <div class="aoe spread">
+                            <img class="job" [src]="'/assets/job/'+ solvedPlayers[2].job +'.png'" />
+                        </div>
+                    </td>
+                    <td>
+                        <div class="aoe spread">
+                            <img class="job" [src]="'/assets/job/'+ solvedPlayers[3].job +'.png'" />
+                        </div>
+                    </td>
+                    <td>
+                        <div class="aoe stack">
+                            <img class="job" [src]="'/assets/job/'+ solvedPlayers[4].job +'.png'" />
+                            <img class="job" [src]="'/assets/job/'+ solvedPlayers[5].job +'.png'" />
+                        </div>
+                    </td>
+                    <td>
+                        <div class="aoe stack">
+                            <img class="job" [src]="'/assets/job/'+ solvedPlayers[6].job +'.png'" />
+                            <img class="job" [src]="'/assets/job/'+ solvedPlayers[7].job +'.png'" />
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="lineup-cover">
+            <div><button mat-button>Show party lineup</button></div>
         </div>
     </mat-card-content>
 </mat-card>
