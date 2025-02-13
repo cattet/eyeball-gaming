@@ -60,17 +60,17 @@ const basePlayerData: player[] = [
 export class HomeComponent implements OnInit {
 
   public wrothDebuffs: debuff[] = [
-    {id: 0, name: 'spread', iconUrl: '/assets/spread.png', duration: '23' },
-    {id: 0, name: 'spread', iconUrl: '/assets/spread.png', duration: '23' },
-    {id: 0, name: 'spread', iconUrl: '/assets/spread.png', duration: '23' },
-    {id: 0, name: 'spread', iconUrl: '/assets/spread.png', duration: '23' },
-    {id: 1, name: 'stack', iconUrl: '/assets/stack.png', duration: '23' },
-    {id: 1, name: 'stack', iconUrl: '/assets/stack.png', duration: '23' }
+    {id: 0, name: 'spread', iconUrl: 'assets/spread.png', duration: '23' },
+    {id: 0, name: 'spread', iconUrl: 'assets/spread.png', duration: '23' },
+    {id: 0, name: 'spread', iconUrl: 'assets/spread.png', duration: '23' },
+    {id: 0, name: 'spread', iconUrl: 'assets/spread.png', duration: '23' },
+    {id: 1, name: 'stack', iconUrl: 'assets/stack.png', duration: '23' },
+    {id: 1, name: 'stack', iconUrl: 'assets/stack.png', duration: '23' }
   ]
 
   public miscDebuffs: debuff[] = [
-    {id: 2, name: 'passed-vow', iconUrl: '/assets/passed-vow.png', duration: '1m'},
-    {id: 3, name: 'vow', iconUrl: '/assets/vow.png', duration: '30' }
+    {id: 2, name: 'passed-vow', iconUrl: 'assets/passed-vow.png', duration: '1m'},
+    {id: 3, name: 'vow', iconUrl: 'assets/vow.png', duration: '30' }
   ]
 
   public partyList: player[] = [];

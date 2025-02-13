@@ -22,7 +22,7 @@
         @for (player of partyList; track player; let index = $index) {
             <div class="player-row" cdkDrag>
                 <span class="job">
-                    <img class="job" [src]="'/assets/job/'+ player.job +'.png'" />
+                    <img class="job" [src]="'assets/job/'+ player.job +'.png'" />
                     <span class="bar aggro" [class]="{'first': player.aggroOrder==1, 'second': player.aggroOrder==2}">
                         <mat-progress-bar mode="determinate" [value]="player.aggroPercent*100" class="fill"></mat-progress-bar>
                     </span>
@@ -38,7 +38,7 @@
                     <span class="mana-decimal glow-shadow">{{ player.manaPercent * 100 | number:'1.2-2' | xivDecimal }}</span>
                 </span>
                 <span class="order">{{index+1}}</span>
-                <img class="sync" src="/assets/misc/umm.png" />
+                <img class="sync" src="assets/misc/umm.png" />
 
                 <span class="level glow-shadow">Lv{{player.level}}</span>
 
@@ -60,34 +60,34 @@
                 <tr>
                     <td>
                         <div class="aoe spread">
-                            <img class="job" [src]="'/assets/job/'+ solvedPlayers[0].job +'.png'" />
+                            <img class="job" [src]="'assets/job/'+ solvedPlayers[0].job +'.png'" />
                         </div>
                     </td>
                     <td>
                         <div class="aoe spread">
-                            <img class="job" [src]="'/assets/job/'+ solvedPlayers[1].job +'.png'" />
+                            <img class="job" [src]="'assets/job/'+ solvedPlayers[1].job +'.png'" />
                         </div>
                     </td>
                     <td>
                         <div class="aoe spread">
-                            <img class="job" [src]="'/assets/job/'+ solvedPlayers[2].job +'.png'" />
+                            <img class="job" [src]="'assets/job/'+ solvedPlayers[2].job +'.png'" />
                         </div>
                     </td>
                     <td>
                         <div class="aoe spread">
-                            <img class="job" [src]="'/assets/job/'+ solvedPlayers[3].job +'.png'" />
+                            <img class="job" [src]="'assets/job/'+ solvedPlayers[3].job +'.png'" />
                         </div>
                     </td>
                     <td>
                         <div class="aoe stack">
-                            <img class="job" [src]="'/assets/job/'+ solvedPlayers[4].job +'.png'" />
-                            <img class="job" [src]="'/assets/job/'+ solvedPlayers[5].job +'.png'" />
+                            <img class="job" [src]="'assets/job/'+ solvedPlayers[4].job +'.png'" />
+                            <img class="job" [src]="'assets/job/'+ solvedPlayers[5].job +'.png'" />
                         </div>
                     </td>
                     <td>
                         <div class="aoe stack">
-                            <img class="job" [src]="'/assets/job/'+ solvedPlayers[6].job +'.png'" />
-                            <img class="job" [src]="'/assets/job/'+ solvedPlayers[7].job +'.png'" />
+                            <img class="job" [src]="'assets/job/'+ solvedPlayers[6].job +'.png'" />
+                            <img class="job" [src]="'assets/job/'+ solvedPlayers[7].job +'.png'" />
                         </div>
                     </td>
                 </tr>
