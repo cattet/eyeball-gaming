@@ -19,13 +19,16 @@
 }
 .actions-toolbar {
     background: none;
-    text-align: center;
+    padding-right: 45px;
 }
 .actions-toolbar button {
     margin-right: 20px;
 }
+.party-lineup-toggle {
+    width: 180px;
+}
 .page {
-    margin: 40px;
+    margin: 40px 40px 20px 40px;
     display: flex;
 }
 

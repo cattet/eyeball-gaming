@@ -4,7 +4,6 @@
     <span class="filler"></span>
 
     <span>
-        <button mat-button>Github</button>
     </span>
 </mat-toolbar>
 
@@ -102,16 +101,8 @@
 </div>
 <mat-toolbar class="actions-toolbar">
     <span class="filler"></span>
-    <button mat-fab extended (click)="shuffleDebuffs()">
-        <mat-icon>refresh</mat-icon>
+    <button mat-flat-button (click)="shuffleDebuffs()">
         Randomize debuffs
     </button>
-    <button mat-fab extended *ngIf="!showAnswer" (click)="showAnswer = !showAnswer">
-        <mat-icon>visibility</mat-icon>
-        Show party lineup
-    </button>
-    <button mat-fab extended *ngIf="showAnswer" (click)="showAnswer = !showAnswer">
-        <mat-icon>visibility_off</mat-icon>
-        Hide party lineup
-    </button>
+    <mat-slide-toggle (click)="showAnswer = !showAnswer">Show party lineup</mat-slide-toggle>
 </mat-toolbar>
