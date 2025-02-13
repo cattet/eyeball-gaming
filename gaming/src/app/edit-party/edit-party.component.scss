@@ -1,0 +1,25 @@
+@use '@angular/material' as mat;
+
+.edit-party-content {
+  @include mat.theme((
+    density: -1
+  ));
+}
+
+.edit-party-content {
+    width: 400px;
+}
+.edit-party-content p {
+    margin: 0;
+}
+.job {
+    display: inline-block;
+    position: relative;
+    width: 58px;
+    height: 58px;
+    top: -12px;
+    margin-right: 10px;
+}
+.name-field {
+    display: inline-block;
+}

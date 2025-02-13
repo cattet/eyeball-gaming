@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -8,6 +8,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { xivNumberPipe } from './pipes/xivnumber.pipe';
 import { xivDecimalPipe } from './pipes/xivdecimal.pipe';
 import {
@@ -19,6 +20,7 @@ import {
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
 import { LocalStorageService } from '../services/local-storage.service';
+import { EditPartyComponent } from '../edit-party/edit-party.component';
 
 export interface player {
   id: number;
@@ -41,6 +43,9 @@ export interface debuff {
   iconUrl: string;
   duration: string;
 }
+export interface EditPartyDialogData {
+  party: player[];
+}
 
 const LOCALSTORAGEKEYS = {
   'debugExpanded': 'debug-expanded',
@@ -59,12 +64,13 @@ const BASEPLAYERDATA: player[] = [
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, MatGridListModule, MatCardModule, MatToolbarModule, MatButtonModule, MatSlideToggleModule, MatIconModule, MatProgressBarModule, MatExpansionModule, CdkDropListGroup, CdkDropList, CdkDrag, xivNumberPipe, xivDecimalPipe ],
+  imports: [CommonModule, MatDialogModule, MatGridListModule, MatCardModule, MatToolbarModule, MatButtonModule, MatSlideToggleModule, MatIconModule, MatProgressBarModule, MatExpansionModule, CdkDropListGroup, CdkDropList, CdkDrag, xivNumberPipe, xivDecimalPipe ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
-  constructor(private localStorageService: LocalStorageService){}
+  constructor(private localStorageService: LocalStorageService){
+  }
 
   public wrothDebuffs: debuff[] = [
     {id: 0, name: 'spread', iconUrl: 'assets/spread.png', duration: '23' },
@@ -85,10 +91,20 @@ export class HomeComponent implements OnInit {
   public showAnswer: boolean = false;
   public showLogs: boolean = false;
   public logs: string[] = [];
+  readonly dialog = inject(MatDialog);
 
   ngOnInit() {
     this.loadDebugPanelState();
     this.shuffleDebuffs();
+  }
+
+  openDialog() {
+    const dialogRef = this.dialog.open(EditPartyComponent, {
+      data: { party: this.partyList }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
 
   shuffleDebuffs(): void {
@@ -183,7 +199,6 @@ export class HomeComponent implements OnInit {
 
   saveDebugPanelState(expanded: boolean): void {
     this.localStorageService.setItem(LOCALSTORAGEKEYS.debugExpanded, expanded);
-    this.log('Debug panel state saved. ' + expanded);
   }
   loadDebugPanelState(): void {
     const debugExpanded: boolean | null = this.localStorageService.getItem<boolean>(

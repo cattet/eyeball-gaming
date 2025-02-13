@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Customize Party</h2>
+<mat-dialog-content class="mat-typography edit-party-content">
+
+    @for (player of workingCopy; track player) {
+    <p>
+        <img class="job" [src]="'assets/job/'+ player.job +'.png'" />
+        <mat-form-field 
+            [floatLabel]="'auto'" 
+            class="name-field">
+            <mat-label>Player name</mat-label>
+            <input matInput 
+                [placeholder]="player.name"
+                [value]="player.name" 
+                (valueChange)="onNameChange($event)">
+
+        </mat-form-field>
+    </p>
+    }
+    
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Save</button>
+</mat-dialog-actions>

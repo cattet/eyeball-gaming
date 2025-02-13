@@ -94,17 +94,20 @@
             </table>
         </div>
         <div class="lineup-cover" *ngIf="!showAnswer">
-            <div>Party lineup</div>
+            <div>Mechanic resolution</div>
         </div>
     </mat-card-content>
 </mat-card>
 </div>
 <mat-toolbar class="actions-toolbar">
     <span class="filler"></span>
+    <button mat-flat-button (click)="openDialog()">
+        Customize party
+    </button>
     <button mat-flat-button (click)="shuffleDebuffs()">
         Randomize debuffs
     </button>
-    <mat-slide-toggle (click)="showAnswer = !showAnswer">Show party lineup</mat-slide-toggle>
+    <mat-slide-toggle (click)="showAnswer = !showAnswer">Show solution</mat-slide-toggle>
 </mat-toolbar>
 <mat-expansion-panel [expanded]="showLogs" (expandedChange)="saveDebugPanelState($event)" class="debug-panel">
     <mat-expansion-panel-header>
