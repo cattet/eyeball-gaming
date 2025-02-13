@@ -1,12 +1,15 @@
 {
   "name": "gaming",
   "version": "0.0.0",
+  "homepageUrl":"https://cattet.github.io/eyeball-gaming",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "private": true,
   "dependencies": {
