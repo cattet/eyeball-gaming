@@ -6,6 +6,22 @@
     ));
 }
 
+$wrench-path: 'm22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9c-2-2-5-2.4-7.4-1.3L9 6L6 9L1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4';
+
+::ng-deep .icon-slide-toggle .mdc-switch__icon {
+  transform: scale(0.8); // This is optional for a better icon fit
+
+  // Toggle off
+  &--off > path {
+    d: path($wrench-path);
+  }
+  
+  // Toggle on
+  &--on > path {
+    d: path($wrench-path);
+  }
+}
+
 .filler {
     flex: 1 1 auto;
 }
@@ -22,22 +38,23 @@
     padding: 0 45px 0 70px;
 }
 .actions-toolbar button {
-    margin-right: 20px;
+    margin-right: 10px;
 }
 .debug-panel {
     margin: 70px 40px 0 70px;
+    padding: 20px;
 }
 .debug-messages {
     font-family: 'Consolas', Courier, monospace;
     font-size: smaller;
-    height: 140px;
-    max-height: 140px;
+    height: 100px;
+    max-height: 100px;
     overflow: scroll;
     opacity: 0.5;
 }
 .debug-messages p {
-    margin-top: 0px;
-    margin-bottom: 0px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .party-lineup-toggle {
@@ -134,7 +151,7 @@
     text-shadow: 0px 0px 5px var(--mat-sys-on-background);
 }
 
-.mat-mdc-card-header {
+.party-container .mat-mdc-card-header {
     padding: 0;
 }
 

@@ -220,7 +220,8 @@ export class HomeComponent implements OnInit {
 
 
   saveDebugPanelState(expanded: boolean): void {
-    this.localStorageService.setItem(LOCALSTORAGEKEYS.debugExpanded, expanded);
+    this.showLogs = !this.showLogs;
+    this.localStorageService.setItem(LOCALSTORAGEKEYS.debugExpanded, this.showLogs);
   }
   loadDebugPanelState(): void {
     const debugExpanded: boolean | null = this.localStorageService.getItem<boolean>(

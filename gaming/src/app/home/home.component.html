@@ -4,6 +4,7 @@
     <span class="filler"></span>
 
     <span>
+        <mat-slide-toggle class="icon-slide-toggle" [checked]="showLogs" (click)="saveDebugPanelState(showLogs)"></mat-slide-toggle>
     </span>
 </mat-toolbar>
 
@@ -109,13 +110,15 @@
     </button>
     <mat-slide-toggle (click)="showAnswer = !showAnswer">Show solution</mat-slide-toggle>
 </mat-toolbar>
-<mat-expansion-panel [expanded]="showLogs" (expandedChange)="saveDebugPanelState($event)" class="debug-panel">
-    <mat-expansion-panel-header>
-        <mat-panel-title> Debug </mat-panel-title>
-    </mat-expansion-panel-header>
-    <div class="debug-messages">
-    @for (log of logs; track log) {
-        <p>{{log}}</p>
-    }
-    </div> 
-</mat-expansion-panel>
+<mat-card *ngIf="showLogs" class="debug-panel">
+    <mat-card-header>
+        <mat-card-title>Debug</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="debug-messages">
+            @for (log of logs; track log) {
+                <p>{{log}}</p>
+            }
+        </div> 
+    </mat-card-content>
+</mat-card>
