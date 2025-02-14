@@ -1,0 +1,84 @@
+.filler {
+    flex: 1 1 auto;
+}
+.glow {
+    text-shadow: 0px 0px 5px rgb(131, 189, 255), 0px 0px 4px rgb(46, 95, 255);
+}
+.glow-shadow {
+    text-shadow: 0px 0px 5px rgb(131, 189, 255), 0px 0px 4px rgb(46, 95, 255), 0px 2px 5px black,  0px 0px 3px black, 0px 2px 2px black;
+}
+
+/* #region Containers */
+.page {
+    margin: 40px 40px 20px 40px;
+    display: flex;
+}
+.party-container {
+    display: inline-block;
+    width: 450px;
+    min-width: 450px;
+    height: 500px;
+    border: none;
+    background: rgb(255,255,255);
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(0,0,0,1) 45%, rgba(0,0,0,1) 55%, rgba(255,255,255,0) 100%); 
+    box-shadow: none;
+    z-index: 1;
+} 
+.lineup-container {
+    display: inline-block;
+    flex-grow: 1;
+    width: auto;
+    height: 500px;
+    margin-left: 100px;
+    background: none;
+    border: solid 1px var(--mat-sys-background); 
+    text-align: center;
+    z-index: 0;
+}
+/* #endregion */
+
+/* #region Top toolbar */
+$wrench-path: 'm22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9c-2-2-5-2.4-7.4-1.3L9 6L6 9L1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4';
+::ng-deep .icon-slide-toggle .mdc-switch__icon {
+  transform: scale(0.8); // This is optional for a better icon fit
+
+  // Toggle off
+  &--off > path {
+    d: path($wrench-path);
+  }
+  
+  // Toggle on
+  &--on > path {
+    d: path($wrench-path);
+  }
+}
+.actions-toolbar {
+    background: none;
+    padding: 0 45px 0 70px;
+}
+.actions-toolbar button {
+    margin-right: 10px;
+}
+.party-lineup-toggle {
+    width: 180px;
+}
+/* #endregion */
+
+/* #region Debug panel */
+.debug-panel {
+    margin: 70px 40px 0 70px;
+    padding: 20px;
+}
+.debug-messages {
+    font-family: 'Consolas', Courier, monospace;
+    font-size: smaller;
+    height: 100px;
+    max-height: 100px;
+    overflow: scroll;
+    opacity: 0.5;
+}
+.debug-messages p {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+/* #endregion */

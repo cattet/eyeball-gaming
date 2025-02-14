@@ -1,0 +1,251 @@
+@use '@angular/material' as mat;
+
+.party-list {
+    border-radius: 4px;
+    display: block;
+    margin-top: 5px;
+    z-index: 2;
+}
+.party-list-header {
+    display: block;
+    position: relative;
+    left: 28px;
+    top: 2px;
+    font-size: 15pt;
+    font-weight: 800; 
+    font-family: "Michroma", serif;
+    text-shadow: 0px 0px 5px var(--mat-sys-on-background);
+}
+.party-container .mat-mdc-card-header {
+    padding: 0;
+}
+
+/* #region Player row, drag and drop */
+.player-row {
+    padding-left: 20px;
+    cursor: move;
+    font-size: 14px;
+    min-height: 60px;
+    line-height: 60px;
+    height: 60px;
+    white-space: nowrap;
+}
+.cdk-drag-preview {
+    border: none;
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+                0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  }
+.cdk-drag-placeholder {
+    opacity: 0;
+}
+.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+.player-row:last-child {
+    border: none;
+}
+.party-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+/* #endregion */
+
+/* #region Player row text */
+.level {
+    margin-right: 8px;
+}
+.job {
+    margin-right: 10px;
+}
+.player {
+    margin-right: 20px;
+}
+.job {
+    display: inline-block;
+    position: relative;
+    width: 40px;
+    top: 0px;
+}
+.aggro-a {
+    position: absolute;
+   font-size: 24pt;
+   left: -9px;
+}
+.aggro, .health, .mana, .mana-decimal {
+    font-family: "Michroma", serif;
+    font-size: 12pt;
+    font-weight: 600;
+    display: inline-block;
+    position: absolute;
+    top: 12px;
+    width: 124px;
+    text-align: right;
+    z-index: 2;
+}
+.aggro {
+    text-align: left;
+    left: -6px;
+    top: 2px;
+    font-weight: 600;
+    font-size: 11pt;
+}
+.health {
+    left:60px;
+}
+.mana {
+    left: 183px;
+}
+.mana-decimal {
+    left: 210px;
+    font-size: 9pt;
+    top: 16px;
+}
+.health-triangle {
+    font-size: 14pt;
+    display: inline-block;
+    position: absolute;
+    top: 11px;
+    left: 65px;
+}
+.level, .player {
+    position: relative;
+    top: -13px;
+    font-style: italic;
+    font-weight: 600;
+    color: var(--mat-sys-on-background);
+}
+.level {
+    top: -14px;
+    font-size: 12pt;
+    font-family: "Michroma", serif;
+}
+.player {
+    display: inline-block;
+    width: 165px;
+    height: 39px;
+    font-family: "M PLUS Rounded 1c", serif;
+    font-size: 16pt;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    z-index: 0;
+}
+.order {
+    font-family: "Michroma", serif;
+    display: inline-block;
+    position: relative;
+    top: -17px;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+    padding: 0 2px 1px 0;
+    font-weight: 600;
+    font-size: 11pt;
+    border-radius: 5px;
+    border: 2px solid var(--mat-sys-on-background);
+    background: var(--mat-sys-on-background);
+    box-shadow: 0px 0px 3px 0px var(--mat-sys-on-background);
+    color: var(--mat-sys-background);
+}
+.player-row:first-child .order {
+    background: var(--mat-sys-background);
+    color: rgb(243, 178, 0);
+    box-shadow: 0px 0px 3px 0px rgb(243, 178, 0);
+    border-color: rgb(243, 178, 0);
+}
+/* #endregion */
+
+/* #region Player row bars */
+.bar {
+    @include mat.progress-bar-overrides((
+        active-indicator-color: var(--mat-sys-on-background),
+        active-indicator-height: 6px
+    ));
+
+    display: inline-block;
+    position: absolute;
+    top: 30px;
+    height: 5px;
+    background:  var(--mat-sys-background);
+    border: 2px solid var(--mat-sys-on-background);
+    border-radius: 4px;
+    z-index: 1;
+}
+.bar .fill {
+    display: inline-block;
+    position: relative;
+    top: -33px;
+    left: 0px;
+    width: 130px;
+    height: 5px;
+    box-shadow: 0px 0px 0px 1px rgb(131, 189, 255), 0px 0px 5px 2px rgb(46, 95, 255);
+}
+.bar.aggro {
+    width: 33px;
+    left: 1px;
+    border: 2px solid rgb(46, 95, 255);
+}
+.bar.aggro .fill {
+    top: -32px;
+    width: 33px;
+    box-shadow: 0px 0px 0px 1px rgb(131, 189, 255), 0px 0px 5px 2px rgb(46, 95, 255);
+}
+.bar.aggro.second {
+    border: 2px solid rgb(255, 153, 0);
+}
+.bar.aggro.second .fill {
+    width: 33px;
+    box-shadow: 0px 0px 1px 1px rgb(255, 216, 172), 0px 0px 3px 2px orange;
+}
+.bar.aggro.first {
+    border: 2px solid red;
+}
+.bar.aggro.first .fill {
+    width: 33px;
+    box-shadow: 0px 0px 1px 1px rgb(255, 172, 172), 0px 0px 3px 2px red;
+}
+.bar.aggro, .bar.health, .bar.mana {
+    top: 30px;
+}
+.bar.health {
+    width: 130px;
+    left: 50px;
+}
+.bar.mana {
+    width: 130px;
+    left: 200px;
+}
+/* #endregion */
+
+/* #region Player row icons and statuses */
+.sync {
+    position: relative;
+    top: -8px;
+    width: 30px;
+    height: 30px;
+}
+.statuses {
+    display: inline-block;
+    position: relative;
+    width: 300px;
+}
+.status {
+    display: inline-block;
+    position: relative;
+    top: -2px;
+    width: 30px;
+    height: 40px;
+}
+.duration {
+    display: inline-block;
+    position: absolute;
+    font-size: 12pt;
+    width: 30px;
+    margin-top: 3px;
+    margin-left: -30px;
+    text-shadow: 0px 0px 5px rgb(0, 0, 0), 1px 1px 2px rgb(0, 0, 0), 0px 0px 2px rgb(0, 0, 0);
+    text-align: center;
+}
+/* #endregion */

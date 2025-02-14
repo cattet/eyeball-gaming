@@ -39,16 +39,19 @@
                     <span class="mana-decimal glow-shadow">{{ player.manaPercent * 100 | number:'1.2-2' | xivDecimal }}</span>
                 </span>
                 <span class="order">{{index+1}}</span>
-                <img class="sync" src="assets/misc/umm.png" />
+                <img class="sync" src="assets/party-list/sync.png" />
 
                 <span class="level glow-shadow">Lv{{player.level}}</span>
 
                 <span class="player glow-shadow">{{player.name}}</span>
 
-                <span *ngFor="let debuff of player.debuffs" class="debuffs">
-                    <img class="debuff" [src]="debuff.iconUrl" />
-                    <span class="duration">{{debuff.duration}}</span>
+                <span class="statuses">
+                    @for (status of player.statuses; track status) {
+                        <img class="status" [src]="status.iconUrl" />
+                        <span class="duration">{{status.duration}}</span>
+                    }
                 </span>
+
             </div>
         }
         </div>
