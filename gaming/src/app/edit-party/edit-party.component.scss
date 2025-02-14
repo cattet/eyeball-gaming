@@ -5,9 +5,9 @@
     density: -1
   ));
 }
-
 .edit-party-content {
-    width: 400px;
+    min-width: 400px;
+    padding: 0 30px;
 }
 .edit-party-content p {
     margin: 0;
@@ -18,8 +18,32 @@
     width: 58px;
     height: 58px;
     top: -12px;
-    margin-right: 10px;
+    margin-right: -8px;
+    z-index: 1;
+}
+.name-field, .group-field {
+    display: inline-block;
 }
 .name-field {
-    display: inline-block;
+    width: 200px;
+}
+.group-field {
+    top: -10px;
+    margin-left: 10px;
+    width: 100px;
+}
+.clear-field {
+    margin-right: 5px;
+}
+.validation {
+    width: 230px;
+    text-align: left;
+    color: var(--mat-sys-on-error);
+}
+.validation-message {
+    position: relative;
+    top: -5px;
+}
+.validation mat-icon {
+    margin-right: 5px;
 }

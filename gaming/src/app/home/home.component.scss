@@ -182,7 +182,7 @@
     margin-right: 10px;
 }
 .player {
-    margin-right: 5px;
+    margin-right: 20px;
 }
 .job {
     display: inline-block;
@@ -207,7 +207,7 @@
     position: relative;
     top: -33px;
     left: 0px;
-    width: 120px;
+    width: 130px;
     height: 5px;
     box-shadow: 0px 0px 0px 1px rgb(131, 189, 255), 0px 0px 5px 2px rgb(46, 95, 255);
 }
@@ -258,11 +258,14 @@
     font-weight: 600;
     font-size: 11pt;
 }
+.health {
+    left:60px;
+}
 .mana {
-    left: 163px;
+    left: 183px;
 }
 .mana-decimal {
-    left: 190px;
+    left: 210px;
     font-size: 9pt;
     top: 16px;
 }
@@ -282,12 +285,12 @@
     left: 1px;
 }
 .bar.health {
-    width: 120px;
+    width: 130px;
     left: 50px;
 }
 .bar.mana {
-    width: 120px;
-    left: 190px;
+    width: 130px;
+    left: 200px;
 }
 
 .level, .player {
@@ -298,21 +301,26 @@
     color: var(--mat-sys-on-background);
 }
 .level {
+    top: -14px;
     font-size: 12pt;
     font-family: "Michroma", serif;
 }
 .player {
     display: inline-block;
-    width: 160px;
+    width: 165px;
+    height: 39px;
     font-family: "M PLUS Rounded 1c", serif;
     font-size: 16pt;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     z-index: 0;
 }
 .order {
     font-family: "Michroma", serif;
     display: inline-block;
     position: relative;
-    top: -16px;
+    top: -17px;
     width: 14px;
     height: 14px;
     line-height: 14px;
@@ -335,7 +343,7 @@
 
 .sync {
     position: relative;
-    top: -7px;
+    top: -8px;
     width: 30px;
     height: 30px;
 }

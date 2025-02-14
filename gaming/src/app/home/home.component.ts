@@ -27,6 +27,7 @@ export interface player {
   job: string;
   level: number;
   name: string;
+  group: number;
   maxHealth: number;
   healthPercent: number;
   manaPercent: number;
@@ -43,23 +44,29 @@ export interface debuff {
   iconUrl: string;
   duration: string;
 }
+export interface customName {
+  id: number;
+  name: string;
+}
 export interface EditPartyDialogData {
   party: player[];
+  defaultParty: player[];
 }
 
 const LOCALSTORAGEKEYS = {
   'debugExpanded': 'debug-expanded',
-  'partyListOrder': 'user-party-list-order'
+  'partyListOrder': 'user-party-list-order',
+  'partyListNames': 'user-party-list-names'
 };
 const BASEPLAYERDATA: player[] = [
-  { id: 0, job: 'MCH', level: 90, name: 'Range Group1', maxHealth: 66791, healthPercent: 1, manaPercent: 1, aggroPercent: 0.2, aggroOrder: 6, jobPriority: 2, groupPriority: 2, lineUpOrder: 0, debuffs: [] },
-  { id: 1, job: 'WAR', level: 90, name: 'Tank Group1', maxHealth: 94171, healthPercent: 0.8, manaPercent: 1, aggroPercent: 0.8, aggroOrder: 2, jobPriority: 4, groupPriority: 2, lineUpOrder: 0, debuffs: [] },
-  { id: 2, job: 'PLD', level: 90, name: 'Tank Group2', maxHealth: 96236, healthPercent: 0.65, manaPercent: 1, aggroPercent: 1, aggroOrder: 1, jobPriority: 4, groupPriority: 1, lineUpOrder: 0, debuffs: [] },
-  { id: 3, job: 'WHM', level: 90, name: 'Healer Group1', maxHealth: 61056, healthPercent: 1, manaPercent: .777, aggroPercent: 0.1, aggroOrder: 7, jobPriority: 3, groupPriority: 2, lineUpOrder: 0, debuffs: [] },
-  { id: 4, job: 'SCH', level: 90, name: 'Healer Group2', maxHealth: 61056, healthPercent: 1, manaPercent: .95, aggroPercent: 0.1, aggroOrder: 8, jobPriority: 3, groupPriority: 1, lineUpOrder: 0, debuffs: [] },
-  { id: 5, job: 'DRG', level: 90, name: 'Melee Group1', maxHealth: 67602, healthPercent: 1, manaPercent: 1, aggroPercent: 0.3, aggroOrder: 4, jobPriority: 1, groupPriority: 2, lineUpOrder: 0, debuffs: [] },
-  { id: 6, job: 'SMN', level: 90, name: 'Melee Group2', maxHealth: 58116, healthPercent: 1, manaPercent: .96, aggroPercent: 0.2, aggroOrder: 5, jobPriority: 1, groupPriority: 1, lineUpOrder: 0, debuffs: [] },
-  { id: 7, job: 'PCT', level: 90, name: 'Range Group2', maxHealth: 61081, healthPercent: 1, manaPercent: .95, aggroPercent: 0.4, aggroOrder: 3, jobPriority: 2, groupPriority: 1, lineUpOrder: 0, debuffs: [] }
+  { id: 0, job: 'MCH', level: 90, name: 'Range Group1', group: 1, maxHealth: 66791, healthPercent: 1, manaPercent: 1, aggroPercent: 0.2, aggroOrder: 6, jobPriority: 2, groupPriority: 2, lineUpOrder: 0, debuffs: [] },
+  { id: 1, job: 'WAR', level: 90, name: 'Tank Group1', group: 1, maxHealth: 94171, healthPercent: 0.8, manaPercent: 1, aggroPercent: 0.8, aggroOrder: 2, jobPriority: 4, groupPriority: 2, lineUpOrder: 0, debuffs: [] },
+  { id: 2, job: 'PLD', level: 90, name: 'Tank Group2', group: 2, maxHealth: 96236, healthPercent: 0.65, manaPercent: 1, aggroPercent: 1, aggroOrder: 1, jobPriority: 4, groupPriority: 1, lineUpOrder: 0, debuffs: [] },
+  { id: 3, job: 'WHM', level: 90, name: 'Healer Group1', group: 1, maxHealth: 61056, healthPercent: 1, manaPercent: .777, aggroPercent: 0.1, aggroOrder: 7, jobPriority: 3, groupPriority: 2, lineUpOrder: 0, debuffs: [] },
+  { id: 4, job: 'SCH', level: 90, name: 'Healer Group2', group: 2, maxHealth: 61056, healthPercent: 1, manaPercent: .95, aggroPercent: 0.1, aggroOrder: 8, jobPriority: 3, groupPriority: 1, lineUpOrder: 0, debuffs: [] },
+  { id: 5, job: 'DRG', level: 90, name: 'Melee Group1', group: 1, maxHealth: 67602, healthPercent: 1, manaPercent: 1, aggroPercent: 0.3, aggroOrder: 4, jobPriority: 1, groupPriority: 2, lineUpOrder: 0, debuffs: [] },
+  { id: 6, job: 'SMN', level: 90, name: 'Melee Group2', group: 2, maxHealth: 58116, healthPercent: 1, manaPercent: .96, aggroPercent: 0.2, aggroOrder: 5, jobPriority: 1, groupPriority: 1, lineUpOrder: 0, debuffs: [] },
+  { id: 7, job: 'PCT', level: 90, name: 'Range Group2', group: 2, maxHealth: 61081, healthPercent: 1, manaPercent: .95, aggroPercent: 0.4, aggroOrder: 3, jobPriority: 2, groupPriority: 1, lineUpOrder: 0, debuffs: [] }
 ]
 
 @Component({
@@ -96,15 +103,30 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.loadDebugPanelState();
     this.shuffleDebuffs();
+    this.loadPartyListNames();
   }
 
   openDialog() {
     const dialogRef = this.dialog.open(EditPartyComponent, {
-      data: { party: this.partyList }
+      data: { 
+        party: this.partyList,
+        defaultParty: BASEPLAYERDATA,
+      }
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+      this.updateParty(result);
     });
+  }
+
+  updateParty(updatedParty: player[]): void {
+    updatedParty.forEach(updatedPlayer => {
+      var partyListPlayer: player | undefined = this.partyList.find(player => player.id == updatedPlayer.id);
+      // Right now, updates only consist of player names
+      if(partyListPlayer && partyListPlayer.name && partyListPlayer.name.length) {
+        partyListPlayer.name = updatedPlayer.name;
+      }
+    });
+    this.savePartyListNames();
   }
 
   shuffleDebuffs(): void {
@@ -210,14 +232,34 @@ export class HomeComponent implements OnInit {
       this.showLogs = false;
     }
   }
+  savePartyListNames(): void {
+    const customNames: customName[] = [];
+    this.partyList.forEach(p => {
+      var name: customName = {id: p.id, name: p.name};
+      customNames.push(name);
+    });
+
+    this.localStorageService.setItem(LOCALSTORAGEKEYS.partyListNames, customNames);
+    this.log('Custom names saved.');
+  }
+  loadPartyListNames(): void {
+    const customNames: customName[] | null = this.localStorageService.getItem<customName[]>(
+      LOCALSTORAGEKEYS.partyListNames
+    );
+    customNames?.forEach(customName => {
+      var player: player | undefined = this.partyList.find(p => p.id == customName.id);
+      if(player) {
+        player.name = customName.name;
+      }
+    });
+  }
   savePartyListOrder(): void {
     const partyListOrder: number[] = this.partyList.map(p => p.id);
     const jobList: string[] = this.partyList.map(p => p.job);
 
     this.localStorageService.setItem(LOCALSTORAGEKEYS.partyListOrder, partyListOrder);
-    this.log('New party list order saved. ' + jobList.toString());
+    this.log('Custom party list order saved. ' + jobList.toString());
   }
-
   getPartyListOrder(): number[] | null {
     const partyListOrder: number[] | null = this.localStorageService.getItem<number[]>(
       LOCALSTORAGEKEYS.partyListOrder
