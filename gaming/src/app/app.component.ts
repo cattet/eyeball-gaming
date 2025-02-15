@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
-import {HomeComponent} from './home/home.component';
+import { SimComponent } from './sim/sim.component'; 
 
 @Component({
   selector: 'app-root',
-  imports: [HomeComponent],
+  imports: [SimComponent],
   template:
   `
     <main>
       <header>
       </header>
       <section class="content">
-        <app-home></app-home>
+        <app-sim></app-sim>
       </section>
     </main>
   `,

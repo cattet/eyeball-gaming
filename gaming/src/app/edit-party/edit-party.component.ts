@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { EditPartyDialogData, player } from '../home/home.component';
+import { EditPartyDialogData, player } from '../sim/sim.component';
 import {FormsModule} from '@angular/forms';
 
 

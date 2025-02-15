@@ -1,6 +1,6 @@
 /* #region Imports */
 import { CommonModule } from '@angular/common'
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core'
 import { MatCardModule } from '@angular/material/card'
 import { MatButtonModule } from '@angular/material/button'
 import { MatSlideToggleModule } from '@angular/material/slide-toggle'
@@ -73,16 +73,16 @@ const STATUS: {[index: string]:any} = {
   'vow':          {id: 2, name: 'vow', job: null, iconUrl: 'assets/p6/vow.png', duration: 30 },
   'vowPassed':   {id: 3, name: 'passed vow', job: null, iconUrl: 'assets/p6/vow-passed.png', duration: 60 },
 
-  'galvanize':    {id: 4, name: 'galvanize', job: null, iconUrl: 'assets/status/galvanize.png', duration: 26 },
+  'galvanize':    {id: 4, name: 'galvanize', job: null, iconUrl: 'assets/status/galvanize.png', duration: 27 },
   'veil':         {id: 5, name: 'divine veil', job: null, iconUrl: 'assets/status/veil.png', duration: 24 },
   'tempera':      {id: 6, name: 'tempera grassa', job: null, iconUrl: 'assets/status/tempera.png', duration: 10 },
-  'medica':       {id: 7, name: 'medica 2', job: null, iconUrl: 'assets/status/medica.png', duration: 15 },
-  'tactician':    {id: 8, name: 'tactician', job: null, iconUrl: 'assets/status/tactician.png', duration: 15 },
+  'medica':       {id: 7, name: 'medica 2', job: null, iconUrl: 'assets/status/medica.png', duration: 13 },
+  'tactician':    {id: 8, name: 'tactician', job: null, iconUrl: 'assets/status/tactician.png', duration: 14 },
 
   'storm':        {id: 9, name: 'storm\'s eye', job: 'WAR', iconUrl: 'assets/status/storm.png', duration: 48 },
-  'benison':      {id: 10, name: 'divine benison', job: 'WAR', iconUrl: 'assets/status/benison.png', duration: 7 },
+  'benison':      {id: 10, name: 'divine benison', job: 'WAR', iconUrl: 'assets/status/benison.png', duration: 8 },
   'flight':       {id: 11, name: 'everlasting flight', job: 'PLD', iconUrl: 'assets/status/flight.png', duration: 20 },
-  'catalyze':     {id: 12, name: 'catalyze', job: 'SCH', iconUrl: 'assets/status/catalyze.png', duration: 25 },
+  'catalyze':     {id: 12, name: 'catalyze', job: 'SCH', iconUrl: 'assets/status/catalyze.png', duration: 27 },
   'rekindle':     {id: 13, name: 'rekindle', job:  'SMN', iconUrl: 'assets/status/rekindle.png', duration: 29 },
   'aegis':        {id: 14, name: 'radiant aegis', job:  'SMN', iconUrl: 'assets/status/aegis.png', duration: 23 },
   'hammer3':      {id: 15, name: 'hammer 3', job:  'PCT', iconUrl: 'assets/status/hammer3.png', duration: 27 }
@@ -102,20 +102,20 @@ const DPS_JOBS: string[] = ['MCH', 'DRG', 'SMN', 'PCT']
 /* #endregion */
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-sim',
   imports: [CommonModule, MatDialogModule, MatGridListModule, MatCardModule, MatToolbarModule, MatButtonModule, MatSlideToggleModule, MatIconModule, MatProgressBarModule, MatExpansionModule, CdkDropListGroup, CdkDropList, CdkDrag, xivNumberPipe, xivDecimalPipe, xivStatusComponent ],
-  templateUrl: './home.component.html',
+  templateUrl: './sim.component.html',
   styleUrls: [
-    './stylesheets/home.component.scss',
-    './stylesheets/home.component.party.scss',
-    './stylesheets/home.component.playerbars.scss',
-    './stylesheets/home.component.arena.scss']
+    './stylesheets/sim.component.scss',
+    './stylesheets/sim.component.party.scss',
+    './stylesheets/sim.component.playerbars.scss',
+    './stylesheets/sim.component.arena.scss']
 })
-export class HomeComponent implements OnInit {
+export class SimComponent implements OnInit {
 
   constructor(private localStorageService: LocalStorageService){}
-
   readonly dialog = inject(MatDialog)
+  public statusResetEmitter: EventEmitter<boolean> = new EventEmitter()
   public partyList: player[] = []
   public solvedPlayers: player[] = []
   public logs: string[] = []
@@ -136,6 +136,7 @@ export class HomeComponent implements OnInit {
     this.assignVowDebuffs()
     this.assignAdditionalStatuses()
     this.randomizePlayerResources()
+    this.resetStatusDurations()
     this.solveSpots()
   }
 
@@ -145,17 +146,6 @@ export class HomeComponent implements OnInit {
       p.shieldPercent = this.getRandomPercent(40, 90)
       p.manaPercent = this.getRandomPercent(80, 100)
     })
-  }
-
-  updatePartyCustomizations(updatedParty: player[]): void {
-    updatedParty.forEach(updatedPlayer => {
-      var partyListPlayer: player | undefined = this.partyList.find(player => player.id == updatedPlayer.id)
-      // Right now, updates only consist of player names
-      if(partyListPlayer && partyListPlayer.name && partyListPlayer.name.length) {
-        partyListPlayer.name = updatedPlayer.name
-      }
-    })
-    this.savePartyListNames()
   }
 
   solveSpots(): void {
@@ -174,6 +164,17 @@ export class HomeComponent implements OnInit {
     this.solvedPlayers.push(nothingPlayers[0])
     this.solvedPlayers.push(stackPlayers[1])
     this.solvedPlayers.push(nothingPlayers[1])
+  }
+
+  updatePartyCustomizations(updatedParty: player[]): void {
+    updatedParty.forEach(updatedPlayer => {
+      var partyListPlayer: player | undefined = this.partyList.find(player => player.id == updatedPlayer.id)
+      // Right now, updates only consist of player names
+      if(partyListPlayer && partyListPlayer.name && partyListPlayer.name.length) {
+        partyListPlayer.name = updatedPlayer.name
+      }
+    })
+    this.savePartyListNames()
   }
   /* #endregion */
 
@@ -301,8 +302,8 @@ export class HomeComponent implements OnInit {
   }
   /* #endregion */
 
-  /* #region Event handlers */
-  openDialog() {
+  /* #region Event handlers and emitters */
+  openDialog(): void {
     const dialogRef = this.dialog.open(EditPartyComponent, {
       data: { 
         party: this.partyList,
@@ -314,7 +315,11 @@ export class HomeComponent implements OnInit {
     })
   }
 
-  onStatusExpire(e: Event, playerId: number, statusId: number) {
+  resetStatusDurations(): void {
+    this.statusResetEmitter.emit(true);
+  }
+
+  onStatusExpire(e: Event, playerId: number, statusId: number): void {
     if(e) {
       let player: player | undefined = this.partyList.find(p => p.id == playerId )
       if(player) {
@@ -325,7 +330,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  drop(event: CdkDragDrop<player[]>) {
+  drop(event: CdkDragDrop<player[]>): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex)
     } else {
@@ -342,7 +347,9 @@ export class HomeComponent implements OnInit {
 
   /* #region Generic helpers */
   getRandomPercent(min: number, max: number): number {
-    return (Math.floor(Math.random() * (max - min + 1)) + min) / 100
+    var percent: number = (Math.floor(Math.random() * (max - min + 1)) + min) / 100;
+    if(percent > .95) percent = 1 // Almost full bars don't look good
+    return percent
   }
 
   log(debugMessage: string): void {

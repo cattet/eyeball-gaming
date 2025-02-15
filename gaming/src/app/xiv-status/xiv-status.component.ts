@@ -1,25 +1,43 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core'
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'xiv-status',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './xiv-status.component.html',
   styleUrl: './xiv-status.component.scss'
 })
-export class xivStatusComponent implements OnInit {
+export class xivStatusComponent implements OnInit, OnDestroy {
   @Input() iconUrl: string = ''
   @Input() maxDuration: number = 0
-  @Output() expire = new EventEmitter();
+  @Input() resetListener: EventEmitter<boolean> = new EventEmitter()
+  @Output() expire = new EventEmitter()
 
   public duration: number = 0
+  private timerId: any
 
   ngOnInit(): void {
-    this.duration = this.maxDuration
-    setInterval(() => {
+    this.resetDuration()
+
+    if(this.resetListener){
+      this.resetListener.subscribe(data => {
+        this.resetDuration()
+      })
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.resetDuration()
+  }
+
+  resetDuration(): void {
+    clearInterval(this.timerId)
+    this.duration = this.maxDuration;
+    this.timerId = setInterval(() => {
       if(this.duration > 0) {
-        this.duration--;
+        this.duration--
       } else {
-        this.expire.emit(true);
+        this.expire.emit(true)
       }
     }, 1000)
   }

@@ -37,7 +37,7 @@
                         <span *ngIf="player.aggroOrder > 1">{{player.aggroOrder}}</span>
                         <span class="aggro-a" *ngIf="player.aggroOrder == 1">A</span>
                     </span>
-                    <span class="health-triangle glow-shadow" *ngIf="player.healthPercent < 1">🞃</span>
+                    <span class="health-triangle glow-shadow" *ngIf="player.healthPercent < 0.99">🞃</span>
                     <span class="health glow-shadow">{{player.healthPercent * player.maxHealth | number:'1.0-0' | xivNumber}}</span>
                     <span class="mana glow-shadow">{{player.manaPercent * 100 | number:'1.0-0' | xivNumber}}</span>
                     <span class="mana-decimal glow-shadow">{{ player.manaPercent * 100 | number:'1.2-2' | xivDecimal }}</span>
@@ -55,6 +55,7 @@
                             [class]="{'status-hide': index >= 5}" 
                             [iconUrl]="status.iconUrl" 
                             [maxDuration]="status.duration"
+                            [resetListener]="statusResetEmitter"
                             (expire)="onStatusExpire($event, player.id, status.id)"></xiv-status>
                     }
                 </span>
