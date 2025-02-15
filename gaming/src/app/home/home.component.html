@@ -20,13 +20,17 @@
         [cdkDropListData]="partyList"
         (cdkDropListDropped)="drop($event)"
         class="party-list">
-        @for (player of partyList; track player; let index = $index) {
+        @for (player of partyList; track player.id; let index = $index) {
             <div class="player-row" cdkDrag>
                 <span class="job">
                     <img class="job" [src]="'assets/job/'+ player.job +'.png'" />
                     <span class="bar aggro" [class]="{'first': player.aggroOrder==1, 'second': player.aggroOrder==2}">
                         <mat-progress-bar mode="determinate" [value]="player.aggroPercent*100" class="fill"></mat-progress-bar>
                     </span>
+
+                    <span class="bar shield-shadow"><mat-progress-bar mode="determinate" [value]="player.shieldPercent*100" class="fill"></mat-progress-bar></span>
+                    <span class="bar shield"><mat-progress-bar mode="determinate" [value]="player.shieldPercent*100" class="fill"></mat-progress-bar></span>
+                    
                     <span class="bar health"><mat-progress-bar mode="determinate" [value]="player.healthPercent*100" class="fill"></mat-progress-bar></span>
                     <span class="bar mana"><mat-progress-bar mode="determinate" [value]="player.manaPercent*100" class="fill"></mat-progress-bar></span>
                     <span class="aggro glow-shadow">
@@ -46,9 +50,12 @@
                 <span class="player glow-shadow">{{player.name}}</span>
 
                 <span class="statuses">
-                    @for (status of player.statuses; track status) {
-                        <img class="status" [src]="status.iconUrl" />
-                        <span class="duration">{{status.duration}}</span>
+                    @for (status of player.statuses; track status.id; let index = $index) {
+                        <xiv-status
+                            [class]="{'status-hide': index >= 5}" 
+                            [iconUrl]="status.iconUrl" 
+                            [maxDuration]="status.duration"
+                            (expire)="onStatusExpire($event, player.id, status.id)"></xiv-status>
                     }
                 </span>
 
@@ -98,20 +105,20 @@
             </table>
         </div>
         <div class="lineup-cover" *ngIf="!showAnswer">
-            <div>Mechanic resolution</div>
+            <div>Arena</div>
         </div>
     </mat-card-content>
 </mat-card>
 </div>
 <mat-toolbar class="actions-toolbar">
     <span class="filler"></span>
+    <button mat-flat-button (click)="randomizePartyState()">
+        Re-roll!
+    </button>
     <button mat-flat-button (click)="openDialog()">
         Customize party
     </button>
-    <button mat-flat-button (click)="shuffleDebuffs()">
-        Randomize debuffs
-    </button>
-    <mat-slide-toggle (click)="showAnswer = !showAnswer">Show solution</mat-slide-toggle>
+    <mat-slide-toggle (click)="showAnswer = !showAnswer">Show arena</mat-slide-toggle>
 </mat-toolbar>
 <mat-card *ngIf="showLogs" class="debug-panel">
     <mat-card-header>

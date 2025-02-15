@@ -6,6 +6,8 @@
     margin-top: 5px;
     z-index: 2;
 }
+
+/* #region Party list header */
 .party-list-header {
     display: block;
     position: relative;
@@ -19,6 +21,7 @@
 .party-container .mat-mdc-card-header {
     padding: 0;
 }
+/* #endregion */
 
 /* #region Player row, drag and drop */
 .player-row {
@@ -159,11 +162,6 @@
 
 /* #region Player row bars */
 .bar {
-    @include mat.progress-bar-overrides((
-        active-indicator-color: var(--mat-sys-on-background),
-        active-indicator-height: 6px
-    ));
-
     display: inline-block;
     position: absolute;
     top: 30px;
@@ -172,6 +170,12 @@
     border: 2px solid var(--mat-sys-on-background);
     border-radius: 4px;
     z-index: 1;
+    @include mat.progress-bar-overrides((
+        active-indicator-color: var(--mat-sys-on-background),
+        track-color:  rgba(255, 208, 0, 0),
+        active-indicator-height: 7px,
+        track-height: 7px
+    ));
 }
 .bar .fill {
     display: inline-block;
@@ -190,7 +194,6 @@
 .bar.aggro .fill {
     top: -32px;
     width: 33px;
-    box-shadow: 0px 0px 0px 1px rgb(131, 189, 255), 0px 0px 5px 2px rgb(46, 95, 255);
 }
 .bar.aggro.second {
     border: 2px solid rgb(255, 153, 0);
@@ -212,11 +215,48 @@
 .bar.health {
     width: 130px;
     left: 50px;
+    @include mat.progress-bar-overrides((
+        track-color:  rgba(255, 208, 0, 1),
+    ));
 }
 .bar.mana {
     width: 130px;
     left: 200px;
 }
+.bar.shield, .bar.shield-shadow {
+    top: 27px;
+    left: 52px;
+    border: none;
+    box-shadow: none;
+    background: none;
+    @include mat.progress-bar-overrides((
+        active-indicator-color: rgb(255, 208, 0),
+        active-indicator-height: 7px,
+        track-height: 7px
+    ));
+}
+.bar.shield-shadow {
+    top: 31px;
+    left: 50px;
+    @include mat.progress-bar-overrides((
+        active-indicator-color: rgba(255, 174, 0, 0.8),
+        active-indicator-height: 10px,
+        track-height: 10px
+    ));
+}
+.bar.shield .fill, .bar.shield-shadow .fill {
+    height: 6px;
+    border: none;
+    box-shadow: none;
+}
+.bar.shield-shadow .fill{
+    height: 12px;
+}
+:host ::ng-deep .bar.shield-shadow .fill .mdc-linear-progress__bar-inner {
+    box-shadow: 0px 0px 5px 5px rgba(255, 174, 0, 1)
+}
+
+
 /* #endregion */
 
 /* #region Player row icons and statuses */
@@ -231,21 +271,7 @@
     position: relative;
     width: 300px;
 }
-.status {
-    display: inline-block;
-    position: relative;
-    top: -2px;
-    width: 30px;
-    height: 40px;
-}
-.duration {
-    display: inline-block;
-    position: absolute;
-    font-size: 12pt;
-    width: 30px;
-    margin-top: 3px;
-    margin-left: -30px;
-    text-shadow: 0px 0px 5px rgb(0, 0, 0), 1px 1px 2px rgb(0, 0, 0), 0px 0px 2px rgb(0, 0, 0);
-    text-align: center;
+.status-hide {
+    opacity: 0;
 }
 /* #endregion */

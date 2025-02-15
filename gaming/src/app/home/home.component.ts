@@ -22,6 +22,8 @@ import {
 } from '@angular/cdk/drag-drop'
 import { LocalStorageService } from '../services/local-storage.service'
 import { EditPartyComponent } from '../edit-party/edit-party.component'
+import { xivStatusComponent } from '../xiv-status/xiv-status.component'
+import { Event } from '@angular/router'
 /* #endregion */
 
 /* #region Interfaces */
@@ -33,6 +35,7 @@ export interface player {
   group: number
   maxHealth: number
   healthPercent: number
+  shieldPercent: number
   manaPercent: number
   aggroPercent: number
   aggroOrder: number
@@ -44,6 +47,7 @@ export interface player {
 export interface status {
   id: number
   name: string
+  job: string | null // This refers to the job of the player affected by the status
   iconUrl: string
   duration: number
 }
@@ -58,46 +62,48 @@ export interface EditPartyDialogData {
 /* #endregion */
 
 /* #region Constants */
-const LOCALSTORAGEKEY = {
+const LOCAL_STORAGE_KEY = {
   'debugExpanded': 'debug-expanded',
   'partyListOrder': 'user-party-list-order',
   'partyListNames': 'user-party-list-names'
 }
-const STATUS = {
-  'wrothSpread': {id: 0, name: 'spread', iconUrl: 'assets/p6/spread.png', duration: 23 },
-  'wrothStack':  {id: 1, name: 'stack', iconUrl: 'assets/p6/stack.png', duration: 23 },
-  'vow':          {id: 2, name: 'vow', iconUrl: 'assets/p6/vow.png', duration: 30 },
-  'vowPassed':   {id: 3, name: 'passed vow', iconUrl: 'assets/p6/vow-passed.png', duration: 60 },
+const STATUS: {[index: string]:any} = {
+  'wrothSpread': {id: 0, name: 'spread', job: null, iconUrl: 'assets/p6/spread.png', duration: 23 },
+  'wrothStack':  {id: 1, name: 'stack', job: null, iconUrl: 'assets/p6/stack.png', duration: 23 },
+  'vow':          {id: 2, name: 'vow', job: null, iconUrl: 'assets/p6/vow.png', duration: 30 },
+  'vowPassed':   {id: 3, name: 'passed vow', job: null, iconUrl: 'assets/p6/vow-passed.png', duration: 60 },
 
-  'galvanize':    {id: 4, name: 'galvanize', iconUrl: 'assets/status/galvanize.png', duration: 26 },
-  'veil':         {id: 5, name: 'divine veil', iconUrl: 'assets/status/veil.png', duration: 24 },
-  'tempera':      {id: 6, name: 'tempera grassa', iconUrl: 'assets/status/tempera.png', duration: 10 },
-  'medica':       {id: 7, name: 'medica 2', iconUrl: 'assets/status/medica.png', duration: 13 },
+  'galvanize':    {id: 4, name: 'galvanize', job: null, iconUrl: 'assets/status/galvanize.png', duration: 26 },
+  'veil':         {id: 5, name: 'divine veil', job: null, iconUrl: 'assets/status/veil.png', duration: 24 },
+  'tempera':      {id: 6, name: 'tempera grassa', job: null, iconUrl: 'assets/status/tempera.png', duration: 10 },
+  'medica':       {id: 7, name: 'medica 2', job: null, iconUrl: 'assets/status/medica.png', duration: 15 },
+  'tactician':    {id: 8, name: 'tactician', job: null, iconUrl: 'assets/status/tactician.png', duration: 15 },
 
-  'storm':        {id: 8, name: 'storm\'s eye', iconUrl: 'assets/status/storm.png', duration: 48 },
-  'benison':      {id: 9, name: 'divine benison', iconUrl: 'assets/status/benison.png', duration: 7 },
-  'catalyze':     {id: 10, name: 'catalyze', iconUrl: 'assets/status/catalyze.png', duration: 25 },
-  'rekindle':     {id: 11, name: 'rekindle', iconUrl: 'assets/status/rekindle.png', duration: 29 },
-  'aegis':        {id: 12, name: 'radiant aegis', iconUrl: 'assets/status/aegis.png', duration: 23 },
-  'hammer1':      {id: 13, name: 'hammer 1', iconUrl: 'assets/status/hammer1.png', duration: 27 },
-  'hammer2':      {id: 14, name: 'hammer 2', iconUrl: 'assets/status/hammer2.png', duration: 27 },
-  'hammer3':      {id: 15, name: 'hammer 3', iconUrl: 'assets/status/hammer3.png', duration: 27 }
+  'storm':        {id: 9, name: 'storm\'s eye', job: 'WAR', iconUrl: 'assets/status/storm.png', duration: 48 },
+  'benison':      {id: 10, name: 'divine benison', job: 'WAR', iconUrl: 'assets/status/benison.png', duration: 7 },
+  'flight':       {id: 11, name: 'everlasting flight', job: 'PLD', iconUrl: 'assets/status/flight.png', duration: 20 },
+  'catalyze':     {id: 12, name: 'catalyze', job: 'SCH', iconUrl: 'assets/status/catalyze.png', duration: 25 },
+  'rekindle':     {id: 13, name: 'rekindle', job:  'SMN', iconUrl: 'assets/status/rekindle.png', duration: 29 },
+  'aegis':        {id: 14, name: 'radiant aegis', job:  'SMN', iconUrl: 'assets/status/aegis.png', duration: 23 },
+  'hammer3':      {id: 15, name: 'hammer 3', job:  'PCT', iconUrl: 'assets/status/hammer3.png', duration: 27 }
 }
-const BASEPLAYERDATA: player[] = [
-  { id: 0, job: 'MCH', level: 90, name: 'Range GroupOne', group: 1, maxHealth: 66791, healthPercent: 1, manaPercent: 1, aggroPercent: 0.2, aggroOrder: 6, jobPriority: 2, groupPriority: 2, lineUpOrder: 0, statuses: [] },
-  { id: 1, job: 'WAR', level: 90, name: 'Tank GroupOne', group: 1, maxHealth: 94171, healthPercent: 0.8, manaPercent: 1, aggroPercent: 0.8, aggroOrder: 2, jobPriority: 4, groupPriority: 2, lineUpOrder: 0, statuses: [] },
-  { id: 2, job: 'PLD', level: 90, name: 'Tank GroupTwo', group: 2, maxHealth: 96236, healthPercent: 0.65, manaPercent: 1, aggroPercent: 1, aggroOrder: 1, jobPriority: 4, groupPriority: 1, lineUpOrder: 0, statuses: [] },
-  { id: 3, job: 'WHM', level: 90, name: 'Healer GroupOne', group: 1, maxHealth: 61056, healthPercent: 1, manaPercent: .777, aggroPercent: 0.1, aggroOrder: 7, jobPriority: 3, groupPriority: 2, lineUpOrder: 0, statuses: [] },
-  { id: 4, job: 'SCH', level: 90, name: 'Healer GroupTwo', group: 2, maxHealth: 61056, healthPercent: 1, manaPercent: .95, aggroPercent: 0.1, aggroOrder: 8, jobPriority: 3, groupPriority: 1, lineUpOrder: 0, statuses: [] },
-  { id: 5, job: 'DRG', level: 90, name: 'Melee GroupOne', group: 1, maxHealth: 67602, healthPercent: 1, manaPercent: 1, aggroPercent: 0.3, aggroOrder: 4, jobPriority: 1, groupPriority: 2, lineUpOrder: 0, statuses: [] },
-  { id: 6, job: 'SMN', level: 90, name: 'Melee GroupTwo', group: 2, maxHealth: 58116, healthPercent: 1, manaPercent: .96, aggroPercent: 0.2, aggroOrder: 5, jobPriority: 1, groupPriority: 1, lineUpOrder: 0, statuses: [] },
-  { id: 7, job: 'PCT', level: 90, name: 'Range GroupTwo', group: 2, maxHealth: 61081, healthPercent: 1, manaPercent: .95, aggroPercent: 0.4, aggroOrder: 3, jobPriority: 2, groupPriority: 1, lineUpOrder: 0, statuses: [] }
+const WROTH_DEBUFFS: status[] = [ STATUS['wrothSpread'], STATUS['wrothSpread'], STATUS['wrothSpread'], STATUS['wrothSpread'], STATUS['wrothStack'], STATUS['wrothStack'] ]
+const BASE_PLAYER_DATA: player[] = [
+  { id: 0, job: 'MCH', level: 90, name: 'Range GroupOne', group: 1, maxHealth: 66791, healthPercent: 1, shieldPercent: .7, manaPercent: 1, aggroPercent: 0.2, aggroOrder: 6, jobPriority: 2, groupPriority: 2, lineUpOrder: 0, statuses: [] },
+  { id: 1, job: 'WAR', level: 90, name: 'Tank GroupOne', group: 1, maxHealth: 94171, healthPercent: 0.8, shieldPercent: .3, manaPercent: 1, aggroPercent: 0.8, aggroOrder: 2, jobPriority: 4, groupPriority: 2, lineUpOrder: 0, statuses: [] },
+  { id: 2, job: 'PLD', level: 90, name: 'Tank GroupTwo', group: 2, maxHealth: 96236, healthPercent: 0.65, shieldPercent: .3, manaPercent: 1, aggroPercent: 1, aggroOrder: 1, jobPriority: 4, groupPriority: 1, lineUpOrder: 0, statuses: [] },
+  { id: 3, job: 'WHM', level: 90, name: 'Healer GroupOne', group: 1, maxHealth: 61056, healthPercent: 1, shieldPercent: .6, manaPercent: .777, aggroPercent: 0.1, aggroOrder: 7, jobPriority: 3, groupPriority: 2, lineUpOrder: 0, statuses: [] },
+  { id: 4, job: 'SCH', level: 90, name: 'Healer GroupTwo', group: 2, maxHealth: 61056, healthPercent: 1, shieldPercent: .95, manaPercent: .95, aggroPercent: 0.1, aggroOrder: 8, jobPriority: 3, groupPriority: 1, lineUpOrder: 0, statuses: [] },
+  { id: 5, job: 'DRG', level: 90, name: 'Melee GroupOne', group: 1, maxHealth: 67602, healthPercent: 1, shieldPercent: .6, manaPercent: 1, aggroPercent: 0.3, aggroOrder: 4, jobPriority: 1, groupPriority: 2, lineUpOrder: 0, statuses: [] },
+  { id: 6, job: 'SMN', level: 90, name: 'Melee GroupTwo', group: 2, maxHealth: 58116, healthPercent: 1, shieldPercent: .8, manaPercent: .96, aggroPercent: 0.2, aggroOrder: 5, jobPriority: 1, groupPriority: 1, lineUpOrder: 0, statuses: [] },
+  { id: 7, job: 'PCT', level: 90, name: 'Range GroupTwo', group: 2, maxHealth: 61081, healthPercent: 1, shieldPercent: .75, manaPercent: .95, aggroPercent: 0.4, aggroOrder: 3, jobPriority: 2, groupPriority: 1, lineUpOrder: 0, statuses: [] }
 ]
+const DPS_JOBS: string[] = ['MCH', 'DRG', 'SMN', 'PCT']
 /* #endregion */
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, MatDialogModule, MatGridListModule, MatCardModule, MatToolbarModule, MatButtonModule, MatSlideToggleModule, MatIconModule, MatProgressBarModule, MatExpansionModule, CdkDropListGroup, CdkDropList, CdkDrag, xivNumberPipe, xivDecimalPipe ],
+  imports: [CommonModule, MatDialogModule, MatGridListModule, MatCardModule, MatToolbarModule, MatButtonModule, MatSlideToggleModule, MatIconModule, MatProgressBarModule, MatExpansionModule, CdkDropListGroup, CdkDropList, CdkDrag, xivNumberPipe, xivDecimalPipe, xivStatusComponent ],
   templateUrl: './home.component.html',
   styleUrls: ['./stylesheets/home.component.scss', './stylesheets/home.component.party.scss', './stylesheets/home.component.arena.scss']
 })
@@ -106,7 +112,6 @@ export class HomeComponent implements OnInit {
   constructor(private localStorageService: LocalStorageService){}
 
   readonly dialog = inject(MatDialog)
-  public wrothDebuffs: status[] = [ STATUS.wrothSpread, STATUS.wrothSpread, STATUS.wrothSpread, STATUS.wrothSpread, STATUS.wrothStack, STATUS.wrothStack ]
   public partyList: player[] = []
   public solvedPlayers: player[] = []
   public logs: string[] = []
@@ -114,20 +119,31 @@ export class HomeComponent implements OnInit {
   public showLogs: boolean = false
 
   ngOnInit() {
+    this.randomizePartyState()
+    // Player customizations
     this.loadDebugPanelState()
-    this.shuffleDebuffs()
     this.loadPartyListNames()
   }
 
   /* #region Component logic */
-  shuffleDebuffs(): void {
+  randomizePartyState(): void {
     this.clearStatuses()
     this.assignWrothDebuffs()
-    this.solveSpots()
+    this.assignVowDebuffs()
     this.assignAdditionalStatuses()
+    this.randomizePlayerResources()
+    this.solveSpots()
   }
 
-  updateParty(updatedParty: player[]): void {
+  randomizePlayerResources(): void {
+    this.partyList.forEach(p => {
+      p.healthPercent = this.getRandomPercent(85, 100)
+      p.shieldPercent = this.getRandomPercent(40, 90)
+      p.manaPercent = this.getRandomPercent(80, 100)
+    })
+  }
+
+  updatePartyCustomizations(updatedParty: player[]): void {
     updatedParty.forEach(updatedPlayer => {
       var partyListPlayer: player | undefined = this.partyList.find(player => player.id == updatedPlayer.id)
       // Right now, updates only consist of player names
@@ -136,20 +152,6 @@ export class HomeComponent implements OnInit {
       }
     })
     this.savePartyListNames()
-  }
-
-  assignWrothDebuffs(): void {
-    var workingPlayerIds: number[] = this.partyList.map(p => p.id)
-    this.wrothDebuffs.forEach(debuff => {
-      // Take a random player from our working players list
-      const index = Math.floor(Math.random() * workingPlayerIds.length)
-      var luckyPlayerId: number = workingPlayerIds[index]
-      // Copy debuff into actual player data
-      var partyPlayer = this.partyList.find(p => p.id == luckyPlayerId)
-      if(partyPlayer) partyPlayer.statuses = [debuff]
-      // Remove the player from our working array to assign debuffs to other players only
-      workingPlayerIds.splice(index, 1)
-    })
   }
 
   solveSpots(): void {
@@ -169,25 +171,6 @@ export class HomeComponent implements OnInit {
     this.solvedPlayers.push(stackPlayers[1])
     this.solvedPlayers.push(nothingPlayers[1])
   }
-
-  assignAdditionalStatuses(): void {
-    console.log('assigning additional statuses')
-    // Additional p6 statuses (vow, passed vow)
-
-    // Personal statuses
-
-    // Mitigation and healing for everyone
-    this.partyList.forEach(p => {
-      p.statuses.push(STATUS.galvanize);
-      p.statuses.push(STATUS.veil);
-      p.statuses.push(STATUS.catalyze);
-      p.statuses.push(STATUS.tempera);
-      p.statuses.push(STATUS.medica);
-
-      // Remove extras (beyond 5)
-      p.statuses = p.statuses.slice(0, 5);
-    });
-  }
   /* #endregion */
 
   /* #region Component logic helpers */
@@ -197,14 +180,28 @@ export class HomeComponent implements OnInit {
       if(savedOrder) {
         savedOrder.forEach((id, index) => {
           // Reorder based on player preferences in local storage
-          this.partyList[index] = this.clone(BASEPLAYERDATA.find((p: player) => p.id == id))
+          this.partyList[index] = this.clone(BASE_PLAYER_DATA.find((p: player) => p.id == id))
         })
       } else {
         // Get a straight fresh clone of the base data
-        this.partyList = this.clone(BASEPLAYERDATA)
+        this.partyList = this.clone(BASE_PLAYER_DATA)
       }
     }
     this.partyList.forEach(p => { p.statuses = []})
+  }
+
+  assignStatusesToUniquePlayers(statuses: status[], players: player[]): void {
+    var workingPlayerIds: number[] = players.map(p => p.id)
+    statuses.forEach(status => {
+      // Take a random player from our working players list
+      const index = Math.floor(Math.random() * workingPlayerIds.length)
+      var luckyPlayerId: number = workingPlayerIds[index]
+      // Copy status into actual player data
+      var partyPlayer = this.partyList.find(p => p.id == luckyPlayerId)
+      if(partyPlayer) partyPlayer.statuses.push(status)
+      // Remove the player from our working array to assign statuses to other players only
+      workingPlayerIds.splice(index, 1)
+    })
   }
 
   sortPlayersByPriority(players: player[]): player[] {
@@ -216,16 +213,49 @@ export class HomeComponent implements OnInit {
       return 0
     })
   }
+
+  assignAdditionalStatuses(): void {
+    // Personal statuses
+    for(let key in STATUS){
+      let status: status = STATUS[key]
+      let validPlayer: player | undefined = this.partyList.filter(p => p.job == status.job)[0]
+      if(validPlayer) validPlayer.statuses.push(status)
+    }
+
+    // Mitigation and healing for everyone
+    this.partyList.forEach(p => {
+      p.statuses.push(STATUS['galvanize']);
+      p.statuses.push(STATUS['veil']);
+      p.statuses.push(STATUS['tempera']);
+      p.statuses.push(STATUS['medica']);
+      p.statuses.push(STATUS['tactician']);
+      // Remove extras (beyond 5)
+      // p.statuses = p.statuses.slice(0, 5);
+    });
+  }
+
+  assignWrothDebuffs(): void {
+    this.assignStatusesToUniquePlayers(WROTH_DEBUFFS, this.partyList);
+  }
+
+  assignVowDebuffs(): void {
+    // Main tank will always have the vow
+    var mainTank: player | undefined = this.partyList.find(p => p.job == 'WAR');
+    if(mainTank) mainTank.statuses.push(STATUS['vow']);
+    // The vow could have been passed to the MT by any DPS player
+    var dpsPlayers: player[] = this.partyList.filter(p => DPS_JOBS.includes(p.job))
+    this.assignStatusesToUniquePlayers([STATUS['vowPassed']], dpsPlayers);
+  }
   /* #endregion */
 
   /* #region Local storage */
   saveDebugPanelState(expanded: boolean): void {
     this.showLogs = !this.showLogs
-    this.localStorageService.setItem(LOCALSTORAGEKEY.debugExpanded, this.showLogs)
+    this.localStorageService.setItem(LOCAL_STORAGE_KEY.debugExpanded, this.showLogs)
   }
   loadDebugPanelState(): void {
     const debugExpanded: boolean | null = this.localStorageService.getItem<boolean>(
-      LOCALSTORAGEKEY.debugExpanded
+      LOCAL_STORAGE_KEY.debugExpanded
     )
     if(debugExpanded){
       this.showLogs = debugExpanded
@@ -240,12 +270,12 @@ export class HomeComponent implements OnInit {
       customNames.push(name)
     })
 
-    this.localStorageService.setItem(LOCALSTORAGEKEY.partyListNames, customNames)
+    this.localStorageService.setItem(LOCAL_STORAGE_KEY.partyListNames, customNames)
     this.log('Custom names saved.')
   }
   loadPartyListNames(): void {
     const customNames: customName[] | null = this.localStorageService.getItem<customName[]>(
-      LOCALSTORAGEKEY.partyListNames
+      LOCAL_STORAGE_KEY.partyListNames
     )
     customNames?.forEach(customName => {
       var player: player | undefined = this.partyList.find(p => p.id == customName.id)
@@ -258,12 +288,12 @@ export class HomeComponent implements OnInit {
     const partyListOrder: number[] = this.partyList.map(p => p.id)
     const jobList: string[] = this.partyList.map(p => p.job)
 
-    this.localStorageService.setItem(LOCALSTORAGEKEY.partyListOrder, partyListOrder)
+    this.localStorageService.setItem(LOCAL_STORAGE_KEY.partyListOrder, partyListOrder)
     this.log('Custom party list order saved. ' + jobList.toString())
   }
   getPartyListOrder(): number[] | null {
     const partyListOrder: number[] | null = this.localStorageService.getItem<number[]>(
-      LOCALSTORAGEKEY.partyListOrder
+      LOCAL_STORAGE_KEY.partyListOrder
     )
     return partyListOrder
   }
@@ -274,13 +304,25 @@ export class HomeComponent implements OnInit {
     const dialogRef = this.dialog.open(EditPartyComponent, {
       data: { 
         party: this.partyList,
-        defaultParty: BASEPLAYERDATA,
+        defaultParty: BASE_PLAYER_DATA,
       }
     })
     dialogRef.afterClosed().subscribe(result => {
-      this.updateParty(result)
+      this.updatePartyCustomizations(result)
     })
   }
+
+  onStatusExpire(e: Event, playerId: number, statusId: number) {
+    if(e) {
+      let player: player | undefined = this.partyList.find(p => p.id == playerId )
+      if(player) {
+        // Remove the expired status
+        let statusIndex: number = player.statuses.findIndex(s => s.id == statusId)
+        player.statuses.splice(statusIndex, 1)
+      }
+    }
+  }
+
   drop(event: CdkDragDrop<player[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex)
@@ -296,7 +338,11 @@ export class HomeComponent implements OnInit {
   }
   /* #endregion */
 
-  /* #region Helpers */
+  /* #region Generic helpers */
+  getRandomPercent(min: number, max: number): number {
+    return (Math.floor(Math.random() * (max - min + 1)) + min) / 100
+  }
+
   log(debugMessage: string): void {
     var timestamp: string = this.formatTimestamp(new Date())
     this.logs.push(`${timestamp}: ${debugMessage}`)
