@@ -12,7 +12,7 @@
     left: 0;
     font-style: italic;
     border-radius: var(--mat-sys-corner-large);
-    background-image: url('/assets/arena/dsu-arena.png');
+    background-image: url(/assets/arena/dsu-arena.png);
     background-position-x: center;
     background-position-y: center;
     background-size: contain;
@@ -28,24 +28,24 @@
     top: 50px;
 }
 .nid {
-    background-image: url('/assets/boss/nid.webp');
+    background-image: url(/assets/boss/nid.webp);
     transform: rotate(90deg);
     left: -300px;
 }
 .hraes {
-    background-image: url('/assets/boss/hraes.webp');
+    background-image: url(/assets/boss/hraes.webp);
     transform: rotate(-90deg);
     right: -315px;
     top: 40px;
 }
 .nid {
-    background-image: url('/assets/boss/pickaso.png');
+    background-image: url(/assets/boss/pickaso.png);
     transform: scaleX(-1) rotate(-20deg);
     left: -150px;
     top: -30px;
 }
 .hraes {
-    background-image: url('/assets/boss/pickol.png');
+    background-image: url(/assets/boss/pickol.png);
     transform: rotate(-20deg);
     right: -150px;
     top: -30px;
