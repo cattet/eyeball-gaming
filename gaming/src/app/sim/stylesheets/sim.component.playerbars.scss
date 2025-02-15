@@ -107,9 +107,20 @@
 .statuses {
     display: inline-block;
     position: relative;
-    width: 300px;
 }
 .status-hide {
     opacity: 0;
+}
+.player-selection {
+    position: absolute;
+    top: -3px;
+    left: -50px;
+    opacity: 0;
+}
+.player-selection:hover {
+    opacity: 0.5;
+}
+.player-selected, .player-selected:hover {
+    opacity: 1;
 }
 /* #endregion */

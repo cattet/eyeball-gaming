@@ -1,135 +1,84 @@
 <mat-toolbar>
-    <span class="title">Wroth Flames Party List Sim</span>
+    <span class="title">wroth flames helper</span>
 
     <span class="filler"></span>
 
     <span>
-        <mat-slide-toggle class="icon-slide-toggle" [checked]="showLogs" (click)="saveDebugPanelState(showLogs)"></mat-slide-toggle>
     </span>
 </mat-toolbar>
 
 <div class="page">
-<!-- To-do: Player name input, save player names (local storage), save order (local storage) -->
-<mat-card class="party-container">
-    <mat-card-header>
-        <mat-card-title class="party-list-header glow">FULL PARTY</mat-card-title>
-    </mat-card-header>
+    <mat-card class="party-container">
+        <mat-card-header>
+            <mat-card-title class="party-list-header glow">FULL PARTY</mat-card-title>
+        </mat-card-header>
 
-    <mat-card-content cdkDropListGroup>
-        <div cdkDropList
-        [cdkDropListData]="partyList"
-        (cdkDropListDropped)="drop($event)"
-        class="party-list">
-        @for (player of partyList; track player.id; let index = $index) {
-            <div class="player-row" cdkDrag>
-                <span class="job">
-                    <img class="job" [src]="'assets/job/'+ player.job +'.png'" />
-                    <span class="bar aggro" [class]="{'first': player.aggroOrder==1, 'second': player.aggroOrder==2}">
-                        <mat-progress-bar mode="determinate" [value]="player.aggroPercent*100" class="fill"></mat-progress-bar>
+        <mat-card-content cdkDropListGroup>
+            <div cdkDropList
+            [cdkDropListData]="partyList"
+            (cdkDropListDropped)="drop($event)"
+            class="party-list">
+            @for (player of partyList; track player.id; let index = $index) {
+                <div class="player-row" cdkDrag>
+                    <span class="job">
+                        <img class="job" [src]="'assets/job/'+ player.job +'.png'" />
+                        <span class="player-selection" [class]="{ 'player-selected': player.id == selectedPlayer }">
+                            <button mat-icon-button aria-label="Select player" (click)="selectAndSavePlayer(player.id)">
+                            <mat-icon>star</mat-icon>
+                            </button>
+                        </span>
+                        <span class="bar aggro" [class]="{'first': player.aggroOrder==1, 'second': player.aggroOrder==2}">
+                            <mat-progress-bar mode="determinate" [value]="player.aggroPercent*100" class="fill"></mat-progress-bar>
+                        </span>
+                        <span class="bar shield-shadow"><mat-progress-bar mode="determinate" [value]="player.shieldPercent*100" class="fill"></mat-progress-bar></span>
+                        <span class="bar shield"><mat-progress-bar mode="determinate" [value]="player.shieldPercent*100" class="fill"></mat-progress-bar></span>
+                        <span class="bar health"><mat-progress-bar mode="determinate" [value]="player.healthPercent*100" class="fill"></mat-progress-bar></span>
+                        <span class="bar mana"><mat-progress-bar mode="determinate" [value]="player.manaPercent*100" class="fill"></mat-progress-bar></span>
+                        <span class="aggro glow-shadow">
+                            <span *ngIf="player.aggroOrder > 1">{{player.aggroOrder}}</span>
+                            <span class="aggro-a" *ngIf="player.aggroOrder == 1">A</span>
+                        </span>
+                        <span class="health-triangle glow-shadow" *ngIf="player.healthPercent < 0.99">🞃</span>
+                        <span class="health glow-shadow">{{player.healthPercent * player.maxHealth | number:'1.0-0' | xivNumber}}</span>
+                        <span class="mana glow-shadow">{{player.manaPercent * 100 | number:'1.0-0' | xivNumber}}</span>
+                        <span class="mana-decimal glow-shadow">{{ player.manaPercent * 100 | number:'1.2-2' | xivDecimal }}</span>
                     </span>
+                    <span class="order">{{index+1}}</span>
+                    <img class="sync" src="assets/party-list/sync.png" />
+                    <span class="level glow-shadow">Lv{{player.level}}</span>
+                    <span class="player glow-shadow">{{player.name}}</span>
 
-                    <span class="bar shield-shadow"><mat-progress-bar mode="determinate" [value]="player.shieldPercent*100" class="fill"></mat-progress-bar></span>
-                    <span class="bar shield"><mat-progress-bar mode="determinate" [value]="player.shieldPercent*100" class="fill"></mat-progress-bar></span>
-                    
-                    <span class="bar health"><mat-progress-bar mode="determinate" [value]="player.healthPercent*100" class="fill"></mat-progress-bar></span>
-                    <span class="bar mana"><mat-progress-bar mode="determinate" [value]="player.manaPercent*100" class="fill"></mat-progress-bar></span>
-                    <span class="aggro glow-shadow">
-                        <span *ngIf="player.aggroOrder > 1">{{player.aggroOrder}}</span>
-                        <span class="aggro-a" *ngIf="player.aggroOrder == 1">A</span>
+                    <span class="statuses">
+                        @for (status of player.statuses; track status.id; let index = $index) {
+                            <xiv-status
+                                [class]="{'status-hide': index >= 5}" 
+                                [iconUrl]="status.iconUrl" 
+                                [maxDuration]="status.duration"
+                                [resetListener]="statusResetEmitter"
+                                (expire)="onStatusExpire($event, player.id, status.id)"></xiv-status>
+                        }
                     </span>
-                    <span class="health-triangle glow-shadow" *ngIf="player.healthPercent < 0.99">🞃</span>
-                    <span class="health glow-shadow">{{player.healthPercent * player.maxHealth | number:'1.0-0' | xivNumber}}</span>
-                    <span class="mana glow-shadow">{{player.manaPercent * 100 | number:'1.0-0' | xivNumber}}</span>
-                    <span class="mana-decimal glow-shadow">{{ player.manaPercent * 100 | number:'1.2-2' | xivDecimal }}</span>
-                </span>
-                <span class="order">{{index+1}}</span>
-                <img class="sync" src="assets/party-list/sync.png" />
-
-                <span class="level glow-shadow">Lv{{player.level}}</span>
-
-                <span class="player glow-shadow">{{player.name}}</span>
-
-                <span class="statuses">
-                    @for (status of player.statuses; track status.id; let index = $index) {
-                        <xiv-status
-                            [class]="{'status-hide': index >= 5}" 
-                            [iconUrl]="status.iconUrl" 
-                            [maxDuration]="status.duration"
-                            [resetListener]="statusResetEmitter"
-                            (expire)="onStatusExpire($event, player.id, status.id)"></xiv-status>
-                    }
-                </span>
-
-            </div>
-        }
-        </div>
-    </mat-card-content>
-</mat-card>
-<mat-card class="lineup-container">
-    <mat-card-content>
-        <div class="lineup">
-            <table>
-                <tr>
-                    <td>
-                        <div class="aoe spread">
-                            <img class="job" [src]="'assets/job/'+ solvedPlayers[0].job +'.png'" />
-                        </div>
-                    </td>
-                    <td>
-                        <div class="aoe spread">
-                            <img class="job" [src]="'assets/job/'+ solvedPlayers[1].job +'.png'" />
-                        </div>
-                    </td>
-                    <td>
-                        <div class="aoe spread">
-                            <img class="job" [src]="'assets/job/'+ solvedPlayers[2].job +'.png'" />
-                        </div>
-                    </td>
-                    <td>
-                        <div class="aoe spread">
-                            <img class="job" [src]="'assets/job/'+ solvedPlayers[3].job +'.png'" />
-                        </div>
-                    </td>
-                    <td>
-                        <div class="aoe stack">
-                            <img class="job" [src]="'assets/job/'+ solvedPlayers[4].job +'.png'" />
-                            <img class="job" [src]="'assets/job/'+ solvedPlayers[5].job +'.png'" />
-                        </div>
-                    </td>
-                    <td>
-                        <div class="aoe stack">
-                            <img class="job" [src]="'assets/job/'+ solvedPlayers[6].job +'.png'" />
-                            <img class="job" [src]="'assets/job/'+ solvedPlayers[7].job +'.png'" />
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <div class="lineup-cover" *ngIf="!showAnswer">
-            <div>Arena</div>
-        </div>
-    </mat-card-content>
-</mat-card>
-</div>
-<mat-toolbar class="actions-toolbar">
-    <span class="filler"></span>
-    <button mat-flat-button (click)="randomizePartyState()">
-        Re-roll!
-    </button>
-    <button mat-flat-button (click)="openDialog()">
-        Customize party
-    </button>
-    <mat-slide-toggle (click)="showAnswer = !showAnswer">Show arena</mat-slide-toggle>
-</mat-toolbar>
-<mat-card *ngIf="showLogs" class="debug-panel">
-    <mat-card-header>
-        <mat-card-title>Debug</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-        <div class="debug-messages">
-            @for (log of logs; track log) {
-                <p>{{log}}</p>
+                </div>
             }
-        </div> 
-    </mat-card-content>
-</mat-card>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card class="lineup-container">
+        <mat-card-content class="arena-card-content">
+            <app-arena [selectedPlayer]="selectedPlayer" [solvedPlayers]="solvedPlayers" [resetListener]="statusResetEmitter"></app-arena>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-toolbar class="actions-toolbar">
+        <span class="filler"></span>
+        <button mat-fab extended (click)="randomizePartyState()">
+            <mat-icon>shuffle</mat-icon>
+            re-roll!
+        </button>
+        <button mat-fab extended class="secondary-button" (click)="openDialog()">
+            <mat-icon>settings</mat-icon>
+            customize party
+        </button>
+    </mat-toolbar>
+</div>

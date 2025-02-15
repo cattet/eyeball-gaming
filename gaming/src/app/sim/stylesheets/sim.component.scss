@@ -10,8 +10,8 @@
 
 /* #region Containers */
 .page {
-    margin: 40px 40px 20px 40px;
-    display: flex;
+    margin: 40px auto;
+    width: 1450px;
 }
 .party-container {
     display: inline-block;
@@ -19,25 +19,42 @@
     min-width: 450px;
     height: 500px;
     border: none;
-    background: rgb(255,255,255);
     background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(0,0,0,1) 45%, rgba(0,0,0,1) 55%, rgba(255,255,255,0) 100%); 
     box-shadow: none;
     z-index: 1;
 } 
 .lineup-container {
     display: inline-block;
-    flex-grow: 1;
-    width: auto;
+    width: 800px;
     height: 500px;
-    margin-left: 100px;
+    margin-left: 150px;
+    top: 10px;
     background: none;
     border: solid 1px var(--mat-sys-background); 
     text-align: center;
     z-index: 0;
 }
+.mat-mdc-card-content.arena-card-content {
+    padding: 0;
+}
+.lineup-cover {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    font-style: italic;
+    background: var(--mat-sys-on-secondary-fixed);
+    border-radius: var(--mat-sys-corner-large);
+    opacity: 1;
+}
+.lineup, .lineup-cover div {
+    position: relative;
+    top: 220px;
+}
 /* #endregion */
 
-/* #region Top toolbar */
+/* #region Top navbar and bottom action toolbar */
 $wrench-path: 'm22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9c-2-2-5-2.4-7.4-1.3L9 6L6 9L1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4';
 ::ng-deep .icon-slide-toggle .mdc-switch__icon {
   transform: scale(0.8); // This is optional for a better icon fit
@@ -54,13 +71,14 @@ $wrench-path: 'm22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9c-2-2-5-2.4-7.4-1.3L9 6L6 9L1
 }
 .actions-toolbar {
     background: none;
-    padding: 0 45px 0 70px;
+    margin-top: 20px;
+    padding: 0 45px 0 0;
 }
 .actions-toolbar button {
-    margin-right: 10px;
+    margin: 5px;
 }
-.party-lineup-toggle {
-    width: 180px;
+.mat-mdc-fab.secondary-button {
+    background: var(--mat-sys-on-tertiary);
 }
 /* #endregion */
 

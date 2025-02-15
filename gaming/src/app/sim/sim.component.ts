@@ -12,6 +12,8 @@ import { MatExpansionModule } from '@angular/material/expansion'
 import { MatDialog, MatDialogModule } from '@angular/material/dialog'
 import { xivNumberPipe } from './pipes/xivnumber.pipe'
 import { xivDecimalPipe } from './pipes/xivdecimal.pipe'
+import { ArenaComponent } from '../arena/arena.component'
+
 import {
   CdkDragDrop,
   CdkDrag,
@@ -20,6 +22,7 @@ import {
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop'
+
 import { LocalStorageService } from '../services/local-storage.service'
 import { EditPartyComponent } from '../edit-party/edit-party.component'
 import { xivStatusComponent } from '../xiv-status/xiv-status.component'
@@ -63,9 +66,9 @@ export interface EditPartyDialogData {
 
 /* #region Constants */
 const LOCAL_STORAGE_KEY = {
-  'debugExpanded': 'debug-expanded',
   'partyListOrder': 'user-party-list-order',
-  'partyListNames': 'user-party-list-names'
+  'partyListNames': 'user-party-list-names',
+  'selectedPlayer': 'user-selected-player'
 }
 const STATUS: {[index: string]:any} = {
   'wrothSpread': {id: 0, name: 'spread', job: null, iconUrl: 'assets/p6/spread.png', duration: 23 },
@@ -103,30 +106,28 @@ const DPS_JOBS: string[] = ['MCH', 'DRG', 'SMN', 'PCT']
 
 @Component({
   selector: 'app-sim',
-  imports: [CommonModule, MatDialogModule, MatGridListModule, MatCardModule, MatToolbarModule, MatButtonModule, MatSlideToggleModule, MatIconModule, MatProgressBarModule, MatExpansionModule, CdkDropListGroup, CdkDropList, CdkDrag, xivNumberPipe, xivDecimalPipe, xivStatusComponent ],
+  imports: [CommonModule, MatDialogModule, MatGridListModule, MatCardModule, MatToolbarModule, MatButtonModule, MatSlideToggleModule, MatIconModule, MatProgressBarModule, MatExpansionModule, CdkDropListGroup, CdkDropList, CdkDrag, xivNumberPipe, xivDecimalPipe, xivStatusComponent, ArenaComponent ],
   templateUrl: './sim.component.html',
   styleUrls: [
     './stylesheets/sim.component.scss',
     './stylesheets/sim.component.party.scss',
-    './stylesheets/sim.component.playerbars.scss',
-    './stylesheets/sim.component.arena.scss']
+    './stylesheets/sim.component.playerbars.scss']
 })
 export class SimComponent implements OnInit {
 
   constructor(private localStorageService: LocalStorageService){}
   readonly dialog = inject(MatDialog)
   public statusResetEmitter: EventEmitter<boolean> = new EventEmitter()
+  public selectedPlayer: number = 0;
   public partyList: player[] = []
   public solvedPlayers: player[] = []
-  public logs: string[] = []
   public showAnswer: boolean = false
-  public showLogs: boolean = false
 
   ngOnInit() {
     this.randomizePartyState()
     // Player customizations
-    this.loadDebugPanelState()
     this.loadPartyListNames()
+    this.loadSelectedPlayer()
   }
 
   /* #region Component logic */
@@ -252,20 +253,6 @@ export class SimComponent implements OnInit {
   /* #endregion */
 
   /* #region Local storage */
-  saveDebugPanelState(expanded: boolean): void {
-    this.showLogs = !this.showLogs
-    this.localStorageService.setItem(LOCAL_STORAGE_KEY.debugExpanded, this.showLogs)
-  }
-  loadDebugPanelState(): void {
-    const debugExpanded: boolean | null = this.localStorageService.getItem<boolean>(
-      LOCAL_STORAGE_KEY.debugExpanded
-    )
-    if(debugExpanded){
-      this.showLogs = debugExpanded
-    } else {
-      this.showLogs = false
-    }
-  }
   savePartyListNames(): void {
     const customNames: customName[] = []
     this.partyList.forEach(p => {
@@ -274,7 +261,6 @@ export class SimComponent implements OnInit {
     })
 
     this.localStorageService.setItem(LOCAL_STORAGE_KEY.partyListNames, customNames)
-    this.log('Custom names saved.')
   }
   loadPartyListNames(): void {
     const customNames: customName[] | null = this.localStorageService.getItem<customName[]>(
@@ -292,13 +278,22 @@ export class SimComponent implements OnInit {
     const jobList: string[] = this.partyList.map(p => p.job)
 
     this.localStorageService.setItem(LOCAL_STORAGE_KEY.partyListOrder, partyListOrder)
-    this.log('Custom party list order saved. ' + jobList.toString())
   }
   getPartyListOrder(): number[] | null {
     const partyListOrder: number[] | null = this.localStorageService.getItem<number[]>(
       LOCAL_STORAGE_KEY.partyListOrder
     )
     return partyListOrder
+  }
+  selectAndSavePlayer(playerId: number): void {
+    this.selectedPlayer = playerId
+    this.localStorageService.setItem(LOCAL_STORAGE_KEY.selectedPlayer, playerId)
+  }
+  loadSelectedPlayer(): void {
+    const savedSelectedPlayer: number | null = this.localStorageService.getItem<number>(
+      LOCAL_STORAGE_KEY.selectedPlayer
+    )
+    if(savedSelectedPlayer) this.selectedPlayer = savedSelectedPlayer;
   }
   /* #endregion */
 
@@ -351,12 +346,6 @@ export class SimComponent implements OnInit {
     if(percent > .95) percent = 1 // Almost full bars don't look good
     return percent
   }
-
-  log(debugMessage: string): void {
-    var timestamp: string = this.formatTimestamp(new Date())
-    this.logs.push(`${timestamp}: ${debugMessage}`)
-  }
-
   clone(arrayToClone: any): any {
     return JSON.parse(JSON.stringify(arrayToClone)) as typeof arrayToClone
   }
