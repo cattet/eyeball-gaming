@@ -1,0 +1,115 @@
+@use '@angular/material' as mat;
+
+/* #region Player row bars */
+.bar {
+    display: inline-block;
+    position: absolute;
+    top: 30px;
+    height: 5px;
+    background:  var(--mat-sys-background);
+    border: 2px solid var(--mat-sys-on-background);
+    border-radius: 4px;
+    z-index: 1;
+    @include mat.progress-bar-overrides((
+        active-indicator-color: var(--mat-sys-on-background),
+        track-color:  rgba(255, 208, 0, 0),
+        active-indicator-height: 7px,
+        track-height: 7px
+    ));
+}
+.bar .fill {
+    display: inline-block;
+    position: relative;
+    top: -33px;
+    left: 0px;
+    width: 130px;
+    height: 5px;
+    box-shadow: 0px 0px 0px 1px rgb(131, 189, 255), 0px 0px 5px 2px rgb(46, 95, 255);
+}
+.bar.aggro {
+    width: 33px;
+    left: 1px;
+    border: 2px solid rgb(46, 95, 255);
+}
+.bar.aggro .fill {
+    top: -32px;
+    width: 33px;
+}
+.bar.aggro.second {
+    border: 2px solid rgb(255, 153, 0);
+}
+.bar.aggro.second .fill {
+    width: 33px;
+    box-shadow: 0px 0px 1px 1px rgb(255, 216, 172), 0px 0px 3px 2px orange;
+}
+.bar.aggro.first {
+    border: 2px solid red;
+}
+.bar.aggro.first .fill {
+    width: 33px;
+    box-shadow: 0px 0px 1px 1px rgb(255, 172, 172), 0px 0px 3px 2px red;
+}
+.bar.aggro, .bar.health, .bar.mana {
+    top: 30px;
+}
+.bar.health {
+    width: 130px;
+    left: 50px;
+    @include mat.progress-bar-overrides((
+        track-color:  rgba(255, 208, 0, 1),
+    ));
+}
+.bar.mana {
+    width: 130px;
+    left: 200px;
+}
+.bar.shield, .bar.shield-shadow {
+    top: 27px;
+    left: 52px;
+    border: none;
+    box-shadow: none;
+    background: none;
+    @include mat.progress-bar-overrides((
+        active-indicator-color: rgb(255, 208, 0),
+        active-indicator-height: 7px,
+        track-height: 7px
+    ));
+}
+.bar.shield-shadow {
+    top: 31px;
+    left: 50px;
+    @include mat.progress-bar-overrides((
+        active-indicator-color: rgba(255, 174, 0, 0.8),
+        active-indicator-height: 10px,
+        track-height: 10px
+    ));
+}
+.bar.shield .fill, .bar.shield-shadow .fill {
+    height: 6px;
+    border: none;
+    box-shadow: none;
+}
+.bar.shield-shadow .fill{
+    height: 12px;
+}
+:host ::ng-deep .bar.shield-shadow .fill .mdc-linear-progress__bar-inner {
+    box-shadow: 0px 0px 5px 5px rgba(255, 174, 0, 1)
+}
+/* #endregion */
+
+/* #region Player row icons and statuses */
+.sync {
+    position: relative;
+    top: -8px;
+    width: 30px;
+    height: 30px;
+}
+.statuses {
+    display: inline-block;
+    position: relative;
+    width: 300px;
+}
+.status-hide {
+    opacity: 0;
+}
+/* #endregion */

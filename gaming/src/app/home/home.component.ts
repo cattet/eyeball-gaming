@@ -105,7 +105,11 @@ const DPS_JOBS: string[] = ['MCH', 'DRG', 'SMN', 'PCT']
   selector: 'app-home',
   imports: [CommonModule, MatDialogModule, MatGridListModule, MatCardModule, MatToolbarModule, MatButtonModule, MatSlideToggleModule, MatIconModule, MatProgressBarModule, MatExpansionModule, CdkDropListGroup, CdkDropList, CdkDrag, xivNumberPipe, xivDecimalPipe, xivStatusComponent ],
   templateUrl: './home.component.html',
-  styleUrls: ['./stylesheets/home.component.scss', './stylesheets/home.component.party.scss', './stylesheets/home.component.arena.scss']
+  styleUrls: [
+    './stylesheets/home.component.scss',
+    './stylesheets/home.component.party.scss',
+    './stylesheets/home.component.playerbars.scss',
+    './stylesheets/home.component.arena.scss']
 })
 export class HomeComponent implements OnInit {
 
@@ -229,8 +233,6 @@ export class HomeComponent implements OnInit {
       p.statuses.push(STATUS['tempera']);
       p.statuses.push(STATUS['medica']);
       p.statuses.push(STATUS['tactician']);
-      // Remove extras (beyond 5)
-      // p.statuses = p.statuses.slice(0, 5);
     });
   }
 
