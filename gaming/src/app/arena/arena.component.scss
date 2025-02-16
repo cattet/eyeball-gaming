@@ -17,10 +17,87 @@
     background-repeat: no-repeat;
 }
 
+/* #region Waymarks */
+.waymark-container {
+    position: absolute;
+    width: 800px;
+    height: 0px;
+}
+.waymark {
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    z-index: 1;
+    background-size: contain;
+}
+.waymark.circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+}
+.waymark.blue {
+    border: 1px solid rgb(173, 225, 255);
+    box-shadow: 0px 0px 1px 1px rgb(173, 225, 255), 
+    0px 0px 20px 1px rgb(0, 162, 255), 
+    inset 0px 0px 2px 0px rgba(173, 225, 255, 0.3);
+}
+.waymark.red {
+    border: 1px solid rgb(255, 207, 207);
+    box-shadow: 0px 0px 1px 1px rgb(255, 207, 207), 
+    0px 0px 20px 1px rgb(255, 88, 88), 
+    inset 0px 0px 2px 0px rgba(255, 207, 207, 0.3);
+}
+.waymark.yellow {
+    border: 1px solid rgb(255, 252, 207);
+    box-shadow: 0px 0px 1px 1px rgb(255, 252, 207), 
+    0px 0px 20px 1px rgb(251, 255, 35), 
+    inset 0px 0px 2px 0px rgba(255, 252, 207, 0.3);
+}
+.waymark.purple {
+    border: 1px solid rgb(241, 207, 255);
+    box-shadow: 0px 0px 1px 1px rgb(241, 207, 255), 
+    0px 0px 20px 1px rgb(130, 35, 255), 
+    inset 0px 0px 2px 0px rgba(241, 207, 255, 0.3);
+}
+.waymark-1 {
+    top: 418px;
+    left: 50%;
+    margin-left: -23px;
+}
+.waymark-A {
+    top: 34px;
+    left: 50%;
+    margin-left: -25px;
+}
+.waymark-3 {
+    top: 226px;
+    left: 187px;
+}
+.waymark-C {
+    top: 226px;
+    right: 187px;
+}
+.waymark-2 {
+    top: 495px;
+    right: 116px;
+}
+.waymark-B {
+    top: -40px;
+    right: 116px;
+}
+.waymark-4 {
+    top: -40px;
+    left: 116px;
+}
+.waymark-D {
+    top: 495px;
+    left: 116px;
+}
 /* #region Loat images and containers */
 .loat-container {
     position: absolute;
     width: 800px;
+    height: 0px;
 }
 .nid, .hraes {
     position: relative;
@@ -124,17 +201,19 @@
     height: 200px;
     width: 200px;
     border-radius: 50%;
-    background-color: rgba(147, 37, 113, 0.3);
-    border: 3px dashed rgb(170, 62, 136);
     cursor: pointer;
+}
+.aoe.spread {
+    background-color: rgba(147, 37, 113, 0.3);
+    border: 3px dashed rgb(80, 10, 58);
 }
 .aoe.spread:hover {
     background-color: rgba(147, 37, 113, 0.8);
-    border: 3px dashed rgb(82, 17, 61);
+    border: 3px dashed rgb(80, 10, 58);
 }
 .aoe.spread.selected {
     background-color: rgba(147, 37, 113, 1);
-    border: 3px solid rgb(82, 17, 61);
+    border: 3px solid rgb(80, 10, 58);
 }
 .aoe.stack {
     background-color: rgba(157, 194, 216, 0.3);
@@ -142,11 +221,11 @@
 }
 .aoe.stack:hover {
     background-color: rgba(157, 194, 216, 0.8);
-    border: 3px dashed rgb(35, 116, 163);
+    border: 3px dashed rgb(237, 248, 255);
 }
 .aoe.stack.selected {
     background-color: rgba(157, 194, 216, 1);
-    border: 3px solid rgb(35, 116, 163);
+    border: 3px solid rgb(237, 248, 255);
 }
 .aoe.selected, .aoe:hover {
     box-shadow: 0px 3px 5px #222;
@@ -172,7 +251,7 @@
 }
 .correct-location, .wrong-location {
     position: absolute;
-    top: 430px;
+    top: 427px;
     left: 0px;
     transform: scale(4);
     text-shadow: 0px 1px 1px black, 0px 5px 5px #222;
@@ -182,21 +261,21 @@
     color: rgb(0, 148, 0);
 }
 .wrong-location {
-    color: rgb(136, 0, 0);
+    color: rgb(160, 0, 0);
 }
 /* #endregion */
 
-/* #region Misc */
+/* #region Settings */
 .hint {
     position: absolute;
-    width: 220px;
-    top: 450px;
-    padding: 5px;
-    left: 50%;
-    margin-left: -110px;
-    font-size: smaller;
-    background: var(--mat-sys-outline-variant);
-    border-radius: var(--mat-sys-corner-small);
-    box-shadow: 0px 2px 2px #222;
+    top: 472px;
+    width: 100%;
+    margin: 0 auto;
+    font-size: 10.5pt;
+}
+.settings {
+    position: absolute;
+    top: 464px;
+    right: 4px;
 }
 /* #endregion */

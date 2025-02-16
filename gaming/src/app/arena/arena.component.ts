@@ -2,11 +2,14 @@
 import { Component, EventEmitter, Input, OnInit } from '@angular/core'
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon'
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+
 import * as Sim from '../interfaces'
+
 
 @Component({
   selector: 'app-arena',
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, MatSlideToggleModule],
   templateUrl: './arena.component.html',
   styleUrls: [
     './arena.component.scss'
@@ -18,7 +21,8 @@ export class ArenaComponent implements OnInit {
   @Input() resetListener: EventEmitter<boolean> = new EventEmitter()
   public showSolution: boolean = false;
   public selectedLocation: number = 0;
-  public selectedLoat: number = 0;
+  public selectedLoat: number = 1;
+  public showWaymarks: boolean = false;
 
   ngOnInit(): void {
     if(this.resetListener){

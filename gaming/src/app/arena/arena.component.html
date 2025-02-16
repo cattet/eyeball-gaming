@@ -1,21 +1,33 @@
 <div class="content">
-    <div class="arena-background" style="background-image: url('assets/arena/dsu-arena.png')"></div>
+    <div class="arena-background" (click)="selectedLoat = 0" style="background-image: url('assets/arena/dsu-arena.png')"></div>
 
     <div class="loat-container">
-        <div class="nid" (click)="selectedLoat = 0" [class]="{ 'selected': selectedLoat == 0 }">
-            <div class="loat-image"  style="background-image: url('assets/boss/pickaso.png')"></div>
+        <div class="nid" (click)="selectedLoat = 1" [class]="{ 'selected': selectedLoat == 1 }">
+            <div class="loat-image" style="background-image: url('assets/boss/pickaso.png')"></div>
             <div class="hitbox hitbox-outer"></div>
             <div class="hitbox hitbox-inner"></div>
         </div>
-        <div class="hraes" (click)="selectedLoat = 1" [class]="{ 'selected': selectedLoat == 1 }">
+        <div class="hraes" (click)="selectedLoat = 2" [class]="{ 'selected': selectedLoat == 2 }">
             <div class="loat-image" style="background-image: url('assets/boss/pickol.png')"></div>
             <div class="hitbox hitbox-outer"></div>
             <div class="hitbox hitbox-inner"></div>
         </div>
     </div>
+
+    <div class="waymark-container" *ngIf="showWaymarks">
+        <div class="waymark waymark-1 red" style="background-image: url('assets/arena/waymark1.png')"></div>
+        <div class="waymark waymark-A red circle" style="background-image: url('assets/arena/waymarkA.png')"></div>
+        <div class="waymark waymark-3 blue" style="background-image: url('assets/arena/waymark3.png')"></div>
+        <div class="waymark waymark-C blue circle" style="background-image: url('assets/arena/waymarkC.png')"></div>
+        <div class="waymark waymark-2 yellow" style="background-image: url('assets/arena/waymark2.png')"></div>
+        <div class="waymark waymark-B yellow circle" style="background-image: url('assets/arena/waymarkB.png')"></div>
+        <div class="waymark waymark-4 purple" style="background-image: url('assets/arena/waymark4.png')"></div>
+        <div class="waymark waymark-D purple circle" style="background-image: url('assets/arena/waymarkD.png')"></div>
+    </div>
     
 
     <div class="hint">m2 &nbsp; m1 &nbsp; r2 &nbsp; r1 &nbsp; h2 &nbsp; h1 &nbsp; t2 &nbsp; t1</div>
+    <div class="settings"><mat-slide-toggle labelPosition="before" (click)="showWaymarks = !showWaymarks">waymarks</mat-slide-toggle></div>
 
     <div class="lineup">
         <table>
