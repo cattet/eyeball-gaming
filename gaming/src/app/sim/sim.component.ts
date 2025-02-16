@@ -22,6 +22,7 @@ import { EditPartyComponent } from '../edit-party/edit-party.component'
 import { xivStatusComponent } from '../xiv-status/xiv-status.component'
 import * as Constants from '../constants'
 import * as Sim from '../interfaces'
+import { FaqComponent } from '../faq/faq.component'
 /* #endregion */
 
 @Component({
@@ -224,7 +225,7 @@ export class SimComponent implements OnInit {
   /* #endregion */
 
   /* #region Event handlers and emitters */
-  openDialog(): void {
+  openEditDialog(): void {
     const dialogRef = this.dialog.open(EditPartyComponent, {
       data: { 
         party: this.partyList,
@@ -234,6 +235,10 @@ export class SimComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.updatePartyCustomizations(result)
     })
+  }
+
+  openFaqDialog() {
+    this.dialog.open(FaqComponent);
   }
 
   resetStatusDurations(): void {

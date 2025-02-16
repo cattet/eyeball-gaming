@@ -1,0 +1,55 @@
+<h2 mat-dialog-title>how to use this sim</h2>
+<mat-dialog-content class="mat-typography">
+  <h3>p6 wroth flames priorities</h3>
+  <p>this app makes use of the same priority system as the 
+    <a href="https://ff14.toolboxgaming.space/?id=688796578228271&preview=1#22">NAUR toolbox</a> and 
+    <a href="https://raidplan.io/plan/oKv95gjzoF8a70b1">Saemi's raidplan</a>:</p>
+  <p style="text-align: center">m2 &nbsp; m1 &nbsp; r2 &nbsp; r1 &nbsp; h2 &nbsp; h1 &nbsp; t2 &nbsp; t1</p>
+
+  <h3>party list customizations</h3>
+  <p>users can do the following to make this app more useful for practice:</p>
+  <ul>
+    <li>choose the active party member (you!)
+        <ul><li>click the star button next to the party member most appropriate for your role in your static.</li></ul>
+    </li>
+    <li>reorder the party list
+        <ul><li>simply drag and drop. the order will be saved in your browser.</li></ul>
+    </li>
+    <li>set the names of each party member
+        <ul><li>click "customize party" on the bottom right to open up a dialog and enter names that suit your fancy. these names will persist in your browser until you clear your site data.</li></ul>
+    </li>
+    <li>change the class of each party member <mat-chip disabled>future</mat-chip></li>
+    <li>change group assignments of each party member <mat-chip disabled>future</mat-chip></li>
+  </ul>
+
+  <h3>using the sim</h3>
+  <p>on load, the following statuses will be randomly assigned to appropriate party members and start counting down.</p>
+    <ul>
+        <li>wroth flames debuffs 
+            <ul>
+                <li>spread <img class="status" src="assets/p6/spread.png" /></li>
+                <li>stack <img class="status" src="assets/p6/stack.png" /></li>
+                <li>nothing</li>
+            </ul>
+        <li>vow pass debuffs
+            <ul>
+                <li>vow <img class="status" src="assets/p6/vow.png" /></li>
+                <li>passed vow <img class="status" src="assets/p6/vow-passed.png" /></li>
+            </ul>
+        <li>healing and mitigation</li>
+        <li>class-specific personal buffs</li>
+    </ul>
+    <p>the reasoning behind this is that half the challenge of wroth flames is in finding the debuffs on yourself and the party in the first place.</p>
+    <p>after you think you know what your spot will be in the hot wing / hot tail lineup, 
+        click on the corresponding aoe circle in the arena panel to see if you are right.</p>
+    <p>click &nbsp; <mat-chip disabled>we go agane</mat-chip>  &nbsp; to reroll the statuses and try again.</p>
+
+  <h3>arena options</h3>
+  <p>the arena is to scale. the boss hitboxes, waymarks, and aoes are rendered to match in-game dimensions so you can orient yourself to any of these landmarks.</p>
+  <p>to show or hide boss hitboxes, click on the <span style="text-decoration: line-through">axolotl</span> boss you would like to target. only one boss can be selected at a time to simulate what is actually visible in game. you can click anywhere else in the arena to de-target them.</p>
+  <p>to show or hide waymarks, toggle the slider on the bottom right of the arena. these are off by default to reduce visual clutter.</p>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close cdkFocusInitial>that's cool</button>
+</mat-dialog-actions>
