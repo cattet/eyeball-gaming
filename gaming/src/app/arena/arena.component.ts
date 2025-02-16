@@ -1,8 +1,8 @@
 
 import { Component, EventEmitter, Input, OnInit } from '@angular/core'
 import { CommonModule } from '@angular/common';
-import { player } from '../sim/sim.component';
 import { MatIconModule } from '@angular/material/icon'
+import * as Sim from '../interfaces'
 
 @Component({
   selector: 'app-arena',
@@ -14,7 +14,7 @@ import { MatIconModule } from '@angular/material/icon'
 })
 export class ArenaComponent implements OnInit {
   @Input() selectedPlayer: number = 0;
-  @Input() solvedPlayers: player[] = []
+  @Input() solvedPlayers: Sim.Player[] = []
   @Input() resetListener: EventEmitter<boolean> = new EventEmitter()
   public showSolution: boolean = false;
   public selectedLocation: number = 0;

@@ -6,8 +6,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { EditPartyDialogData, player } from '../sim/sim.component';
 import {FormsModule} from '@angular/forms';
+import * as Sim from '../interfaces'
 
 
 @Component({
@@ -21,10 +21,10 @@ export class EditPartyComponent implements OnInit {
 
   constructor(public matDialogRef: MatDialogRef<EditPartyComponent>) {}
 
-  readonly data = inject<EditPartyDialogData>(MAT_DIALOG_DATA);
-  public workingCopy: player[] = [];
-  public revertCopy: player[] = [];
-  public baseCopy: player[] = [];
+  readonly data = inject<Sim.EditPartyDialogData>(MAT_DIALOG_DATA);
+  public workingCopy: Sim.Player[] = [];
+  public revertCopy: Sim.Player[] = [];
+  public baseCopy: Sim.Player[] = [];
   public validGroups: boolean = true;
   public validation: string = '';
   public confirmSave: boolean = false;
@@ -36,6 +36,7 @@ export class EditPartyComponent implements OnInit {
   }
   
   save(): void {
+    this.validateNames()
     this.matDialogRef.close(this.workingCopy);
   }
 
@@ -43,7 +44,16 @@ export class EditPartyComponent implements OnInit {
     this.matDialogRef.close(this.revertCopy);
   }
 
-  onGroupChange(e: MatSelectChange) {
+  validateNames(): void {
+    this.workingCopy.forEach(p => {
+      let basePlayer: Sim.Player | undefined = this.baseCopy.find(b => b.id == p.id)
+      if(p.name == '' && basePlayer) {
+        p.name = basePlayer.name
+      }
+    })
+  }
+
+  onGroupChange(e: MatSelectChange): void {
     var groupOneCount: number = this.workingCopy.filter(p => p.group == 1).length;
     var groupTwoCount: number = this.workingCopy.filter(p => p.group == 2).length;
     this.validGroups = groupOneCount == groupTwoCount;

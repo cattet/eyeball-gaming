@@ -1,11 +1,11 @@
-<h2 mat-dialog-title>Customize Party</h2>
+<h2 mat-dialog-title>customize party</h2>
 <mat-dialog-content class="mat-typography edit-party-content">
 
     @for (player of workingCopy; track player; let index = $index) {
     <p>
         <img class="job" [src]="'assets/job/'+ player.job +'.png'" />
         <mat-form-field class="name-field">
-            <mat-label>Player name</mat-label>
+            <mat-label>player name</mat-label>
             <input matInput type="text" 
                 [placeholder]="baseCopy[index].name"
                 [(ngModel)]="player.name">
@@ -16,7 +16,7 @@
                 }
         </mat-form-field>
         <mat-form-field class="group-field">
-            <mat-label>Group</mat-label>
+            <mat-label>group</mat-label>
             <mat-select disabled [(ngModel)]="player.group" (selectionChange)="onGroupChange($event)">
               <mat-option [value]="1">1</mat-option>
               <mat-option [value]="2">2</mat-option>
@@ -32,6 +32,6 @@
         <mat-icon>error_outline</mat-icon>
         <span class="validation-message">{{validation}}</span>
     </span>
-    <button mat-button mat-dialog-close (click)="cancel()">Cancel</button>
-    <button mat-button [disabled]="!validGroups" [mat-dialog-close]="true" cdkFocusInitial (click)="save()">Save</button>
+    <button mat-button mat-dialog-close (click)="cancel()">cancel</button>
+    <button mat-button [disabled]="!validGroups" [mat-dialog-close]="true" cdkFocusInitial (click)="save()">save</button>
 </mat-dialog-actions>
