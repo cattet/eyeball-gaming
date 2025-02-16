@@ -16,34 +16,60 @@
     background-position-y: center;
     background-size: contain;
 }
-.nid, .hraes {
+.hint {
     position: absolute;
+    width: 220px;
+    top: 450px;
+    padding: 5px;
+    left: 50%;
+    margin-left: -110px;
+    font-size: smaller;
+    background: var(--mat-sys-outline-variant);
+    border-radius: var(--mat-sys-corner-small);
+    box-shadow: 0px 2px 2px #222;
+}
+.loats {
+    position: absolute;
+    top: 50px;
+}
+.nid, .hraes {
+    position: relative;
+    display: inline-block;
     background-position-x: center;
     background-size: contain;
     background-repeat: no-repeat;
     filter: drop-shadow(-5px 7px 7px #222);
     width: 400px;
     height: 400px;
+}
+.nid {
+    left: -150px;
+    top: -50px;
+    transform: scaleX(-1) rotate(-20deg);
+}
+.hraes {
+    right: -150px;
+    top: -50px;
+    transform: rotate(-20deg);
+}
+.hitbox {  
+    position: relative;
+    border-radius: 50%;
     top: 50px;
 }
-.nid {
-    transform: rotate(90deg);
-    left: -300px;
+.hitbox-outer {
+    width: 400px;
+    height: 400px;
+    border: 4px solid rgba(255, 0, 0, 0.5);
+    filter: drop-shadow(0px 0px 2px rgb(255, 130, 130));
 }
-.hraes {
-    transform: rotate(-90deg);
-    right: -315px;
-    top: 40px;
-}
-.nid {
-    transform: scaleX(-1) rotate(-20deg);
-    left: -150px;
-    top: -30px;
-}
-.hraes {
-    transform: rotate(-20deg);
-    right: -150px;
-    top: -30px;
+.hitbox-inner {
+    position: relative;
+    margin: 0 auto;
+    width: 370px;
+    height: 370px;
+    top: 12px;
+    border: 2px solid rgba(255, 0, 0, 0.5);
 }
 .lineup {
     position: relative;
@@ -59,8 +85,8 @@
 }
 .lineup table {
     position: relative;
-    width: 700px;
-    margin: auto;
+    width: 860px;
+    left: -30px;
 }
 .lineup table td {
     text-align: center;
@@ -75,8 +101,8 @@
 .aoe {
     display: inline-block;
     position: relative;
-    height: 120px;
-    width: 120px;
+    height: 125px;
+    width: 125px;
     border-radius: 50%;
     background-color: rgba(147, 37, 113, 0.3);
     border: 3px dashed rgb(170, 62, 136);
@@ -107,8 +133,9 @@
 }
 .aoe img.job {
     top: 40px;
-    left: 5px;
+    left: 0;
     filter: drop-shadow(0px 3px 3px #222);
+    margin: 0;
     opacity: 0;
 }
 .aoe img.job.visible {
@@ -116,10 +143,11 @@
 }
 .correct-location, .wrong-location {
     position: absolute;
-    top: 340px;
+    top: 360px;
     left: 0px;
     transform: scale(5);
     text-shadow: 0px 1px 1px black, 0px 5px 5px #222;
+    cursor: auto;
 }
 .correct-location {
     color: rgb(0, 148, 0);
