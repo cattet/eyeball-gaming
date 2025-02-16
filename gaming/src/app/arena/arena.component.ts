@@ -18,6 +18,7 @@ export class ArenaComponent implements OnInit {
   @Input() resetListener: EventEmitter<boolean> = new EventEmitter()
   public showSolution: boolean = false;
   public selectedLocation: number = 0;
+  public selectedLoat: number = 0;
 
   ngOnInit(): void {
     if(this.resetListener){

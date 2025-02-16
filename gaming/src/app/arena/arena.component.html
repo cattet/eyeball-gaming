@@ -1,16 +1,16 @@
 <div class="content">
     <div class="arena-background" style="background-image: url('assets/arena/dsu-arena.png')"></div>
 
-    <div class="loats">
-        <div class="nid" style="background-image: url('assets/boss/pickaso.png')">
-            <div class="hitbox hitbox-outer">
-                <div class="hitbox hitbox-inner"></div>
-            </div>
+    <div class="loat-container">
+        <div class="nid" (click)="selectedLoat = 0" [class]="{ 'selected': selectedLoat == 0 }">
+            <div class="loat-image"  style="background-image: url('assets/boss/pickaso.png')"></div>
+            <div class="hitbox hitbox-outer"></div>
+            <div class="hitbox hitbox-inner"></div>
         </div>
-        <div class="hraes" style="background-image: url('assets/boss/pickol.png')">
-            <div class="hitbox hitbox-outer">
-                <div class="hitbox hitbox-inner"></div>
-            </div>
+        <div class="hraes" (click)="selectedLoat = 1" [class]="{ 'selected': selectedLoat == 1 }">
+            <div class="loat-image" style="background-image: url('assets/boss/pickol.png')"></div>
+            <div class="hitbox hitbox-outer"></div>
+            <div class="hitbox hitbox-inner"></div>
         </div>
     </div>
     
@@ -21,35 +21,35 @@
         <table>
             <tr>
                 <td>
-                    <div class="aoe spread" [class]="{ 'selected': selectedLocation==1 }" (click)="selectLocation(1)">
+                    <div class="aoe spread" [class]="{ 'selected': selectedLocation == 1 }" (click)="selectLocation(1)">
                         <img class="job" [class]="{ 'visible': showSolution }" [src]="'assets/job/'+ solvedPlayers[0].job +'.png'" />
                         <mat-icon *ngIf="selectedLocation == 1 && (selectedPlayer == solvedPlayers[0].id)" [inline]="true" class="correct-location">check</mat-icon>
                         <mat-icon *ngIf="selectedLocation == 1 && (selectedPlayer != solvedPlayers[0].id)" [inline]="true" class="wrong-location">close</mat-icon>
                     </div>
                 </td>
                 <td>
-                    <div class="aoe spread" [class]="{ 'selected': selectedLocation==2 }" (click)="selectLocation(2)">
+                    <div class="aoe spread" [class]="{ 'selected': selectedLocation == 2 }" (click)="selectLocation(2)">
                         <img class="job" [class]="{ 'visible': showSolution }" [src]="'assets/job/'+ solvedPlayers[1].job +'.png'" />
                         <mat-icon *ngIf="selectedLocation == 2 && (selectedPlayer == solvedPlayers[1].id)" [inline]="true" class="correct-location">check</mat-icon>
                         <mat-icon *ngIf="selectedLocation == 2 && (selectedPlayer != solvedPlayers[1].id)" [inline]="true" class="wrong-location">close</mat-icon>
                     </div>
                 </td>
                 <td>
-                    <div class="aoe spread" [class]="{ 'selected': selectedLocation==3 }" (click)="selectLocation(3)">
+                    <div class="aoe spread" [class]="{ 'selected': selectedLocation == 3 }" (click)="selectLocation(3)">
                         <img class="job" [class]="{ 'visible': showSolution }" [src]="'assets/job/'+ solvedPlayers[2].job +'.png'" />
                         <mat-icon  *ngIf="selectedLocation == 3 && (selectedPlayer == solvedPlayers[2].id)" [inline]="true" class="correct-location">check</mat-icon>
                         <mat-icon *ngIf="selectedLocation == 3 && (selectedPlayer != solvedPlayers[2].id)" [inline]="true" class="wrong-location">close</mat-icon>
                     </div>
                 </td>
                 <td>
-                    <div class="aoe spread" [class]="{ 'selected': selectedLocation==4 }" (click)="selectLocation(4)">
+                    <div class="aoe spread" [class]="{ 'selected': selectedLocation == 4 }" (click)="selectLocation(4)">
                         <img class="job" [class]="{ 'visible': showSolution }" [src]="'assets/job/'+ solvedPlayers[3].job +'.png'" />
                         <mat-icon *ngIf="selectedLocation == 4 && (selectedPlayer == solvedPlayers[3].id)" [inline]="true" class="correct-location">check</mat-icon>
                         <mat-icon *ngIf="selectedLocation == 4 && (selectedPlayer != solvedPlayers[3].id)" [inline]="true" class="wrong-location">close</mat-icon>
                     </div>
                 </td>
                 <td>
-                    <div class="aoe stack" [class]="{ 'selected': selectedLocation==5 }" (click)="selectLocation(5)">
+                    <div class="aoe stack" [class]="{ 'selected': selectedLocation == 5 }" (click)="selectLocation(5)">
                         <img class="job" [class]="{ 'visible': showSolution }" [src]="'assets/job/'+ solvedPlayers[4].job +'.png'" />
                         <img class="job" [class]="{ 'visible': showSolution }" [src]="'assets/job/'+ solvedPlayers[5].job +'.png'" />
                         <mat-icon *ngIf="selectedLocation == 5 && (selectedPlayer == solvedPlayers[4].id || selectedPlayer == solvedPlayers[5].id)" [inline]="true" class="correct-location">check</mat-icon>
@@ -57,7 +57,7 @@
                     </div>
                 </td>
                 <td>
-                    <div class="aoe stack" [class]="{ 'selected': selectedLocation==6 }" (click)="selectLocation(6)">
+                    <div class="aoe stack" [class]="{ 'selected': selectedLocation == 6 }" (click)="selectLocation(6)">
                         <img class="job" [class]="{ 'visible': showSolution }" [src]="'assets/job/'+ solvedPlayers[6].job +'.png'" />
                         <img class="job" [class]="{ 'visible': showSolution }" [src]="'assets/job/'+ solvedPlayers[7].job +'.png'" />
                         <mat-icon *ngIf="selectedLocation == 6 && (selectedPlayer == solvedPlayers[6].id || selectedPlayer == solvedPlayers[7].id)" [inline]="true" class="correct-location">check</mat-icon>
