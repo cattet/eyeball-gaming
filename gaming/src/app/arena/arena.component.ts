@@ -5,11 +5,12 @@ import { MatIconModule } from '@angular/material/icon'
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import * as Sim from '../interfaces'
+import { SolutionGroupComponent } from "../solution-group/solution-group.component";
 
 
 @Component({
-  selector: 'app-arena',
-  imports: [CommonModule, MatIconModule, MatSlideToggleModule],
+  selector: 'arena',
+  imports: [CommonModule, MatIconModule, MatSlideToggleModule, SolutionGroupComponent],
   templateUrl: './arena.component.html',
   styleUrls: [
     './arena.component.scss'

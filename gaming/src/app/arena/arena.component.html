@@ -33,50 +33,69 @@
         <table>
             <tr>
                 <td>
-                    <div class="aoe spread" [class]="{ 'selected': selectedLocation == 1 }" (click)="selectLocation(1)">
-                        <img class="job" [class]="{ 'visible': showSolution }" [src]="'assets/job/'+ solvedPlayers[0].job +'.png'" />
-                        <mat-icon *ngIf="selectedLocation == 1 && (selectedPlayer == solvedPlayers[0].id)" [inline]="true" class="correct-location">check</mat-icon>
-                        <mat-icon *ngIf="selectedLocation == 1 && (selectedPlayer != solvedPlayers[0].id)" [inline]="true" class="wrong-location">close</mat-icon>
-                    </div>
+                    <solution-group 
+                        [type]="'spread'"
+                        [location]="1"
+                        [players]="[solvedPlayers[0]]"
+                        [selectedLocation]="selectedLocation"
+                        [selectedPlayer]="selectedPlayer"
+                        [showSolution]="showSolution"
+                        (click)="selectLocation(1)"></solution-group>
                 </td>
                 <td>
-                    <div class="aoe spread" [class]="{ 'selected': selectedLocation == 2 }" (click)="selectLocation(2)">
-                        <img class="job" [class]="{ 'visible': showSolution }" [src]="'assets/job/'+ solvedPlayers[1].job +'.png'" />
-                        <mat-icon *ngIf="selectedLocation == 2 && (selectedPlayer == solvedPlayers[1].id)" [inline]="true" class="correct-location">check</mat-icon>
-                        <mat-icon *ngIf="selectedLocation == 2 && (selectedPlayer != solvedPlayers[1].id)" [inline]="true" class="wrong-location">close</mat-icon>
-                    </div>
+                    <solution-group 
+                        [type]="'spread'"
+                        [location]="2"
+                        [players]="[solvedPlayers[1]]"
+                        [selectedLocation]="selectedLocation"
+                        [selectedPlayer]="selectedPlayer"
+                        [showSolution]="showSolution"
+                        (click)="selectLocation(2)"></solution-group>
                 </td>
                 <td>
-                    <div class="aoe spread" [class]="{ 'selected': selectedLocation == 3 }" (click)="selectLocation(3)">
-                        <img class="job" [class]="{ 'visible': showSolution }" [src]="'assets/job/'+ solvedPlayers[2].job +'.png'" />
-                        <mat-icon  *ngIf="selectedLocation == 3 && (selectedPlayer == solvedPlayers[2].id)" [inline]="true" class="correct-location">check</mat-icon>
-                        <mat-icon *ngIf="selectedLocation == 3 && (selectedPlayer != solvedPlayers[2].id)" [inline]="true" class="wrong-location">close</mat-icon>
-                    </div>
+                    <solution-group 
+                        [type]="'spread'"
+                        [location]="3"
+                        [players]="[solvedPlayers[2]]"
+                        [selectedLocation]="selectedLocation"
+                        [selectedPlayer]="selectedPlayer"
+                        [showSolution]="showSolution"
+                        (click)="selectLocation(3)"></solution-group>
                 </td>
                 <td>
-                    <div class="aoe spread" [class]="{ 'selected': selectedLocation == 4 }" (click)="selectLocation(4)">
-                        <img class="job" [class]="{ 'visible': showSolution }" [src]="'assets/job/'+ solvedPlayers[3].job +'.png'" />
-                        <mat-icon *ngIf="selectedLocation == 4 && (selectedPlayer == solvedPlayers[3].id)" [inline]="true" class="correct-location">check</mat-icon>
-                        <mat-icon *ngIf="selectedLocation == 4 && (selectedPlayer != solvedPlayers[3].id)" [inline]="true" class="wrong-location">close</mat-icon>
-                    </div>
+                    <solution-group 
+                        [type]="'spread'"
+                        [location]="4"
+                        [players]="[solvedPlayers[3]]"
+                        [selectedLocation]="selectedLocation"
+                        [selectedPlayer]="selectedPlayer"
+                        [showSolution]="showSolution"
+                        (click)="selectLocation(4)"></solution-group>
                 </td>
                 <td>
-                    <div class="aoe stack" [class]="{ 'selected': selectedLocation == 5 }" (click)="selectLocation(5)">
-                        <img class="job" [class]="{ 'visible': showSolution }" [src]="'assets/job/'+ solvedPlayers[4].job +'.png'" />
-                        <img class="job" [class]="{ 'visible': showSolution }" [src]="'assets/job/'+ solvedPlayers[5].job +'.png'" />
-                        <mat-icon *ngIf="selectedLocation == 5 && (selectedPlayer == solvedPlayers[4].id || selectedPlayer == solvedPlayers[5].id)" [inline]="true" class="correct-location">check</mat-icon>
-                        <mat-icon *ngIf="selectedLocation == 5 && !(selectedPlayer == solvedPlayers[4].id || selectedPlayer == solvedPlayers[5].id)" [inline]="true" class="wrong-location">close</mat-icon>
-                    </div>
+                    <solution-group 
+                        [type]="'stack'"
+                        [location]="5"
+                        [players]="[solvedPlayers[4], solvedPlayers[5]]"
+                        [selectedLocation]="selectedLocation"
+                        [selectedPlayer]="selectedPlayer"
+                        [showSolution]="showSolution"
+                        (click)="selectLocation(5)"></solution-group>
                 </td>
                 <td>
-                    <div class="aoe stack" [class]="{ 'selected': selectedLocation == 6 }" (click)="selectLocation(6)">
-                        <img class="job" [class]="{ 'visible': showSolution }" [src]="'assets/job/'+ solvedPlayers[6].job +'.png'" />
-                        <img class="job" [class]="{ 'visible': showSolution }" [src]="'assets/job/'+ solvedPlayers[7].job +'.png'" />
-                        <mat-icon *ngIf="selectedLocation == 6 && (selectedPlayer == solvedPlayers[6].id || selectedPlayer == solvedPlayers[7].id)" [inline]="true" class="correct-location">check</mat-icon>
-                        <mat-icon *ngIf="selectedLocation == 6 && !(selectedPlayer == solvedPlayers[6].id || selectedPlayer == solvedPlayers[7].id)" [inline]="true" class="wrong-location">close</mat-icon>
-                    </div>
+                    <solution-group 
+                        [type]="'stack'"
+                        [location]="6"
+                        [players]="[solvedPlayers[6], solvedPlayers[7]]"
+                        [selectedLocation]="selectedLocation"
+                        [selectedPlayer]="selectedPlayer"
+                        [showSolution]="showSolution"
+                        (click)="selectLocation(6)"></solution-group>
                 </td>
             </tr>
         </table>
     </div>
 </div>
+
+
+    

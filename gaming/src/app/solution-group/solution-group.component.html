@@ -1,0 +1,32 @@
+<div *ngIf="type == 'spread'" class="aoe spread" [class]="{ 'selected': selectedLocation == location }">
+    <span class="solution" [class]="{ 'visible': showSolution }">
+        <span class="explanation">
+            @for (status of players[0].statuses; track status.id) {
+                <img class="status" *ngIf="status.name == 'spread'" [src]="status.iconUrl" />
+            }
+            <span class="role">{{players[0].subRole.shortName}}{{players[0].group}}</span>
+        </span>
+        <img class="job" [src]="'assets/job/'+ players[0].job +'.png'" />
+        <mat-icon *ngIf="selectedLocation == location && (selectedPlayer == players[0].id)" [inline]="true" class="correct-location">check</mat-icon>
+        <mat-icon *ngIf="selectedLocation == location && (selectedPlayer != players[0].id)" [inline]="true" class="wrong-location">close</mat-icon>
+    </span>
+</div>
+
+<div *ngIf="type == 'stack'" class="aoe stack" [class]="{ 'selected': selectedLocation == location }">
+    <span class="solution" [class]="{ 'visible': showSolution }">
+        <span class="explanation">
+            @for (status of players[0].statuses; track status.id) {
+                <img class="status" *ngIf="status.name == 'stack'" [src]="status.iconUrl" />
+            }
+            <span class="role">{{players[0].subRole.shortName}}{{players[0].group}}</span>
+        </span>
+        <span class="explanation no-status">
+            <img class="status" [src]="" />
+            <span class="role">{{players[1].subRole.shortName}}{{players[1].group}}</span>
+        </span>
+        <img class="job" [src]="'assets/job/'+ players[0].job +'.png'" />
+        <img class="job" [src]="'assets/job/'+ players[1].job +'.png'" />
+        <mat-icon *ngIf="selectedLocation == location && (selectedPlayer == players[0].id || selectedPlayer == players[1].id)" [inline]="true" class="correct-location">check</mat-icon>
+        <mat-icon *ngIf="selectedLocation == location && !(selectedPlayer == players[0].id || selectedPlayer == players[1].id)" [inline]="true" class="wrong-location">close</mat-icon>
+    </span>
+</div>
