@@ -1,6 +1,6 @@
 /* #region Imports */
 import { CommonModule } from '@angular/common'
-import { Component, EventEmitter, OnInit, inject } from '@angular/core'
+import { Component, EventEmitter, OnDestroy, OnInit, inject } from '@angular/core'
 import { Event } from '@angular/router'
 
 import { MatCardModule } from '@angular/material/card'
@@ -36,7 +36,7 @@ import { FaqComponent } from '../faq/faq.component'
     './stylesheets/sim.component.party.scss',
     './stylesheets/sim.component.playerbars.scss']
 })
-export class SimComponent implements OnInit {
+export class SimComponent implements OnInit, OnDestroy {
 
   constructor(private localStorageService: LocalStorageService){}
   readonly dialog = inject(MatDialog)
@@ -45,12 +45,18 @@ export class SimComponent implements OnInit {
   public partyList: Sim.Player[] = []
   public solvedPlayers: Sim.Player[] = []
   public showAnswer: boolean = false
+  public instanceDuration: number = Constants.STATUS['wrothSpread'].duration;
+  private timerId: any
 
   ngOnInit() {
     this.randomizePartyState()
     // Player customizations
     this.loadPartyListNames()
     this.loadSelectedPlayer()
+  } 
+  
+  ngOnDestroy(): void {
+    this.resetInstance()
   }
 
   /* #region Component logic */
@@ -61,14 +67,35 @@ export class SimComponent implements OnInit {
     this.assignAdditionalStatuses()
     this.randomizePlayerResources()
     this.resetStatusDurations()
+    this.resetInstance()
     this.solveSpots()
+  }
+
+  resetInstance(): void {
+    clearInterval(this.timerId)
+    this.instanceDuration = Constants.STATUS['wrothSpread'].duration;
+    this.timerId = setInterval(() => {
+      if(this.instanceDuration > 0) {
+        this.instanceDuration--
+        switch(this.instanceDuration) {
+          case 13: this.damageParty(10643); break
+          case 12: this.healParty(12620); break
+          case 11: this.damageParty(51099); break // 25709, but oopsie someone missed the stack ;3
+          case 10: this.healParty(14540); break
+          case 9: this.damageParty(21771); break
+          case 8: this.healParty(15582);break
+          case 7: this.damageParty(25310); break
+        }
+      }
+    }, 1000)
   }
 
   randomizePlayerResources(): void {
     this.partyList.forEach(p => {
+      p.manaPercent = this.getRandomPercent(80, 100)
       p.healthPercent = this.getRandomPercent(85, 100)
       p.shieldPercent = this.getRandomPercent(40, 90)
-      p.manaPercent = this.getRandomPercent(80, 100)
+      p.shieldOverflowPercent = this.getShieldOverflowPercent(p)
     })
   }
 
@@ -105,6 +132,89 @@ export class SimComponent implements OnInit {
   /* #endregion */
 
   /* #region Component logic helpers */
+  getShieldOverflowPercent(p: Sim.Player): number {
+    let shieldOverflowPercent: number = 0
+    let currentHealth: number = p.healthPercent * p.maxHealth
+    if(p.shieldPercent > 0 && p.healthPercent < 1) {
+      // Calculate shield in bar vs shield overflow (displayed on top)
+      let rawShieldValue: number = p.shieldPercent * p.maxHealth
+      let shieldInHealthBar: number = p.maxHealth - currentHealth
+      shieldOverflowPercent = (rawShieldValue - shieldInHealthBar) / p.maxHealth
+    } else if (p.shieldPercent > 0 && p.healthPercent >= 1){
+      // If health is at max, overflow is the entire shield
+      shieldOverflowPercent = p.shieldPercent
+    }
+    return shieldOverflowPercent
+  } 
+
+  healParty(amount: number): void {
+    this.partyList.forEach(p => {
+      var log: boolean = false
+      // if(p.id == 0) log = true
+      let currentRawHealth: number = p.healthPercent * p.maxHealth
+      let newRawHealth: number = currentRawHealth + amount
+      
+      // We cap the heal at max health. This is the new amount we are working with
+      // Running this block only if we have less than max health, so SOME healing is happening
+      if(currentRawHealth < p.maxHealth) {
+        let amountBeforeOverheal: number = p.maxHealth - currentRawHealth
+        if(newRawHealth > p.maxHealth) {
+          // Add the heal to the current raw health (it becomes 100%)
+          p.healthPercent = 1
+          if(log) console.log('healing + discarding overheal. amountBeforeOverheal', amountBeforeOverheal,'p.healthPercent', p.healthPercent)
+        } else {
+          // Add the heal to the current raw health (it becomes less than 100%)
+          p.healthPercent = newRawHealth / p.maxHealth
+          if(log) console.log('just straight up healing (not overheal)', 'currentRawHealth', currentRawHealth, 'p.maxHealth', p.maxHealth, 'amount', amount)
+        }
+        // Deal with the shield + overhealing
+        // Move the amount healed into the shield, if there was a shield
+        if(p.shieldPercent > 0) {
+          let currentRawShield: number = p.shieldPercent * p.maxHealth
+          let newRawShield: number = currentRawShield + amountBeforeOverheal
+          p.shieldPercent = newRawShield / p.maxHealth
+          p.shieldOverflowPercent = this.getShieldOverflowPercent(p)
+          if(log) console.log('adding healed amount into shield due to not being at max health before. newRawShield', newRawShield,'p.shieldPercent', p.shieldPercent)
+        }
+      }
+      else if(currentRawHealth >= p.maxHealth && newRawHealth > p.maxHealth) {
+        // We have max health already -- nothing happens
+        if (log) console.log('overheal, nothing happens. current health:', currentRawHealth, 'max health', p.maxHealth, 'new raw health', newRawHealth)
+      }
+    })
+  }
+
+  damageParty(amount: number): void {
+    this.partyList.forEach(p => {
+      var log: boolean = false
+      // if(p.id == 0) log = true     
+      let currentRawHealth: number = p.healthPercent * p.maxHealth
+      let currentRawShield: number = p.shieldPercent * p.maxHealth
+      // If the damage is less than the raw shield, we just take it from the shield and leave the health alone
+      if(amount < currentRawShield) {
+        let newRawShield: number = currentRawShield - amount
+        p.shieldPercent = newRawShield / p.maxHealth
+        if(log) console.log('amount < currentRawShield', 'amount', amount, 'currentRawShield', currentRawShield, 'p.shieldpercent', p.shieldPercent,'p.healthpercent', p.healthPercent)
+      } 
+      else if (amount > currentRawShield) {
+        // We are taking more damage than the shield covers
+        let amountAfterShieldDepleted: number = amount - currentRawShield
+        p.shieldPercent = 0
+        // The rest of the damage is taken from raw health
+        let newRawHealth: number = currentRawHealth - amountAfterShieldDepleted
+        p.healthPercent = newRawHealth / p.maxHealth
+        if(log) console.log('amount > currentRawShield', 'amount', amount, 'currentRawShield', currentRawShield, 'p.shieldpercent', p.shieldPercent,'p.healthpercent', p.healthPercent)
+      } 
+      else if(amount == currentRawShield) {
+        p.shieldPercent = 0
+        p.healthPercent = 1
+        if(log) console.log('amount == currentRawShield. p.shieldpercent', p.shieldPercent,'p.healthpercent', p.healthPercent)
+      }
+      if (p.healthPercent < 0) p.healthPercent = 0 // Dedge
+      p.shieldOverflowPercent = this.getShieldOverflowPercent(p)
+    })
+  }
+
   clearStatuses(): void {
     if(!this.partyList.length) {
       let savedOrder: number[] | null = this.getPartyListOrder()

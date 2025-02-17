@@ -9,6 +9,7 @@ export interface Player {
     maxHealth: number
     healthPercent: number
     shieldPercent: number
+    shieldOverflowPercent: number
     manaPercent: number
     aggroPercent: number
     aggroOrder: number

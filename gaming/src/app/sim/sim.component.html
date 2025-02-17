@@ -30,9 +30,9 @@
                         <span class="bar aggro" [class]="{'first': player.aggroOrder==1, 'second': player.aggroOrder==2}">
                             <mat-progress-bar mode="determinate" [value]="player.aggroPercent*100" class="fill"></mat-progress-bar>
                         </span>
-                        <span class="bar shield-shadow"><mat-progress-bar mode="determinate" [value]="player.shieldPercent*100" class="fill"></mat-progress-bar></span>
-                        <span class="bar shield"><mat-progress-bar mode="determinate" [value]="player.shieldPercent*100" class="fill"></mat-progress-bar></span>
-                        <span class="bar health"><mat-progress-bar mode="determinate" [value]="player.healthPercent*100" class="fill"></mat-progress-bar></span>
+                        <span class="bar shield-shadow"><mat-progress-bar mode="determinate" [value]="player.shieldOverflowPercent*100" class="fill"></mat-progress-bar></span>
+                        <span class="bar shield"><mat-progress-bar mode="determinate" [value]="player.shieldOverflowPercent*100" class="fill"></mat-progress-bar></span>
+                        <span class="bar health" [class]="{ 'shield-depleted': player.shieldOverflowPercent == 0 }"><mat-progress-bar mode="determinate" [value]="player.healthPercent*100" class="fill"></mat-progress-bar></span>
                         <span class="bar mana"><mat-progress-bar mode="determinate" [value]="player.manaPercent*100" class="fill"></mat-progress-bar></span>
                         <span class="aggro glow-shadow">
                             <span *ngIf="player.aggroOrder > 1">{{player.aggroOrder}}</span>

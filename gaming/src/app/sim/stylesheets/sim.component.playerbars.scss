@@ -56,7 +56,12 @@
     width: 130px;
     left: 50px;
     @include mat.progress-bar-overrides((
-        track-color:  rgba(255, 208, 0, 1),
+        track-color:  rgba(255, 208, 0, 1)
+    ));
+}
+.bar.health.shield-depleted {
+    @include mat.progress-bar-overrides((
+        track-color:  rgba(255, 208, 0, 0)
     ));
 }
 .bar.mana {
