@@ -102,7 +102,7 @@ export class SimComponent implements OnInit, OnDestroy {
           case 8: this.healParty(15582);break
           case 7: this.damageParty(25310); break
         }
-      }
+      } else { clearInterval(this.timerId) }
     }, 1000)
   }
 
