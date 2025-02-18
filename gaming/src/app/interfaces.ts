@@ -1,7 +1,7 @@
 /* #region Interfaces */
 export interface Player {
     id: number
-    job: string
+    jobId: number,
     subRole: SubRole,
     level: number
     name: string
@@ -18,6 +18,14 @@ export interface Player {
     lineUpOrder: number
     statuses: Status[]
 }
+export interface Job {
+    id: number
+    name: string
+    shortName: string
+    subRole: SubRole
+    personalStatuses: Status[]
+    partyMits: Status[]
+}
 export interface Role {
     id: number
     name: string
@@ -31,13 +39,20 @@ export interface SubRole {
 export interface Status {
     id: number
     name: string
-    job: string | null // This refers to the job of the player affected by the status
+    jobId: number | null // This refers to the job of the player affected by the status
     iconUrl: string
     duration: number
 }
 export interface CustomName {
+    // Old, deprecating
     id: number
     name: string
+}
+export interface CustomPartyData {
+    // New version that will support more data points
+    playerId: number
+    name: string
+    jobId: number
 }
 export interface EditPartyDialogData {
     party: Player[]

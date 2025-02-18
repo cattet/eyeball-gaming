@@ -6,7 +6,7 @@
             }
             <span class="role">{{players[0].subRole.shortName}}{{players[0].group}}</span>
         </span>
-        <img class="job" [src]="'assets/job/'+ players[0].job +'.png'" />
+        <img class="job" [src]="'assets/job/'+ players[0].jobId +'.png'" />
         <mat-icon *ngIf="selectedLocation == location && (selectedPlayer == players[0].id)" [inline]="true" class="correct-location">check</mat-icon>
         <mat-icon *ngIf="selectedLocation == location && (selectedPlayer != players[0].id)" [inline]="true" class="wrong-location">close</mat-icon>
     </span>
@@ -24,8 +24,8 @@
             <img class="status" [src]="" />
             <span class="role">{{players[1].subRole.shortName}}{{players[1].group}}</span>
         </span>
-        <img class="job" [src]="'assets/job/'+ players[0].job +'.png'" />
-        <img class="job" [src]="'assets/job/'+ players[1].job +'.png'" />
+        <img class="job" [src]="'assets/job/'+ players[0].jobId +'.png'" />
+        <img class="job" [src]="'assets/job/'+ players[1].jobId +'.png'" />
         <mat-icon *ngIf="selectedLocation == location && (selectedPlayer == players[0].id || selectedPlayer == players[1].id)" [inline]="true" class="correct-location">check</mat-icon>
         <mat-icon *ngIf="selectedLocation == location && !(selectedPlayer == players[0].id || selectedPlayer == players[1].id)" [inline]="true" class="wrong-location">close</mat-icon>
     </span>

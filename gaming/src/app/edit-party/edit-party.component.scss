@@ -6,21 +6,36 @@
   ));
 }
 .edit-party-content {
-    min-width: 400px;
+    min-width: 320px;
     padding: 0 30px;
 }
 .edit-party-content p {
     margin: 0;
 }
+
+
+
+
 .job {
     display: inline-block;
     position: relative;
     width: 58px;
     height: 58px;
     top: -12px;
-    margin-right: -8px;
+    margin-right: -10px;
     z-index: 1;
 }
+.job-field {
+    display: inline-block;
+    position: relative;
+    width: 90px;
+    margin-right: 10px;
+}
+
+
+
+
+
 .name-field, .group-field {
     display: inline-block;
 }

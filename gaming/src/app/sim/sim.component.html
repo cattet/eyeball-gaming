@@ -21,7 +21,7 @@
             @for (player of partyList; track player.id; let index = $index) {
                 <div class="player-row" cdkDrag>
                     <span class="job">
-                        <img class="job" [src]="'assets/job/'+ player.job +'.png'" />
+                        <img class="job" [src]="'assets/job/'+ player.jobId +'.png'" />
                         <span class="player-selection" [class]="{ 'player-selected': player.id == selectedPlayer }">
                             <button mat-icon-button aria-label="Select player" (click)="selectAndSavePlayer(player.id)">
                             <mat-icon>star</mat-icon>

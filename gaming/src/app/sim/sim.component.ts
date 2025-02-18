@@ -45,39 +45,55 @@ export class SimComponent implements OnInit, OnDestroy {
   public partyList: Sim.Player[] = []
   public solvedPlayers: Sim.Player[] = []
   public showAnswer: boolean = false
-  public instanceDuration: number = Constants.STATUS['wrothSpread'].duration;
+  public akhMornTimer: number = Constants.STATUS['wrothSpread'].duration;
   private timerId: any
 
   ngOnInit() {
-    this.randomizePartyState()
-    // Player customizations
-    this.loadPartyListNames()
+    this.createPartyList()
+    // Player customizations first, so the solved players aren't old classes/names
+    this.tryLoadPartyListData()
     this.loadSelectedPlayer()
+    // Statuses, akh morn timer
+    this.randomizePartyState()
   } 
   
   ngOnDestroy(): void {
-    this.resetInstance()
+    this.resetAkhMornTimer()
   }
 
   /* #region Component logic */
+  tryLoadPartyListData() {
+    // This is temporary and should be replaced with just this.loadPartyListData() later
+    const oldDataExists: Sim.CustomName[] | null = this.localStorageService.getItem<Sim.CustomName[]>(Constants.LOCAL_STORAGE_KEY['partyListNames'])
+    if(oldDataExists) {
+      // Load the old data
+      this.loadPartyListNames()
+      // Save it into the new data structure
+      this.saveCustomPartyData()
+      // Clear the old data so we don't do this again
+      this.localStorageService.removeItem(Constants.LOCAL_STORAGE_KEY['partyListNames'])
+    } else {
+      this.loadCustomPartyData()
+    }
+  }
+
   randomizePartyState(): void {
-    this.clearStatuses()
     this.assignWrothDebuffs()
     this.assignVowDebuffs()
     this.assignAdditionalStatuses()
     this.randomizePlayerResources()
     this.resetStatusDurations()
-    this.resetInstance()
+    this.resetAkhMornTimer()
     this.solveSpots()
   }
 
-  resetInstance(): void {
+  resetAkhMornTimer(): void {
     clearInterval(this.timerId)
-    this.instanceDuration = Constants.STATUS['wrothSpread'].duration;
+    this.akhMornTimer = Constants.STATUS['wrothSpread'].duration;
     this.timerId = setInterval(() => {
-      if(this.instanceDuration > 0) {
-        this.instanceDuration--
-        switch(this.instanceDuration) {
+      if(this.akhMornTimer > 0) {
+        this.akhMornTimer--
+        switch(this.akhMornTimer) {
           case 13: this.damageParty(10643); break
           case 12: this.healParty(12620); break
           case 11: this.damageParty(51099); break // 25709, but oopsie someone missed the stack ;3
@@ -119,15 +135,24 @@ export class SimComponent implements OnInit, OnDestroy {
 
   updatePartyCustomizations(updatedParty: Sim.Player[]): void {
     if(!updatedParty) return
-
+    // Update the party list
     updatedParty.forEach(updatedPlayer => {
-      var partyListPlayer: Sim.Player | undefined = this.partyList.find(player => player.id == updatedPlayer.id)
-      // Right now, updates only consist of player names
-      if(partyListPlayer && partyListPlayer.name && partyListPlayer.name.length) {
-        partyListPlayer.name = updatedPlayer.name
+      let partyListPlayer: Sim.Player | undefined = this.partyList.find(player => player.id == updatedPlayer.id)
+      // Also update the solved party list (so new classes show up correctly without resetting statuses and timers)
+      let solvedListPlayer: Sim.Player | undefined = this.solvedPlayers.find(player => player.id == updatedPlayer.id)
+      if(partyListPlayer){
+        if(partyListPlayer.name && updatedPlayer.name.length) {
+          partyListPlayer.name = updatedPlayer.name
+        }
+        partyListPlayer.jobId = updatedPlayer.jobId
+      }
+      if(solvedListPlayer){
+        // Don't really care to check the validity of this lol. It's not displayed.
+        solvedListPlayer.name = updatedPlayer.name 
+        solvedListPlayer.jobId = updatedPlayer.jobId
       }
     })
-    this.savePartyListNames()
+    this.saveCustomPartyData()
   }
   /* #endregion */
 
@@ -153,7 +178,6 @@ export class SimComponent implements OnInit, OnDestroy {
       // if(p.id == 0) log = true
       let currentRawHealth: number = p.healthPercent * p.maxHealth
       let newRawHealth: number = currentRawHealth + amount
-      
       // We cap the heal at max health. This is the new amount we are working with
       // Running this block only if we have less than max health, so SOME healing is happening
       if(currentRawHealth < p.maxHealth) {
@@ -215,7 +239,7 @@ export class SimComponent implements OnInit, OnDestroy {
     })
   }
 
-  clearStatuses(): void {
+  createPartyList(): void {
     if(!this.partyList.length) {
       let savedOrder: number[] | null = this.getPartyListOrder()
       let baseData: Sim.Player[] = this.clone(Constants.BASE_PLAYER_DATA)
@@ -261,10 +285,9 @@ export class SimComponent implements OnInit, OnDestroy {
     // Personal statuses
     for(let key in Constants.STATUS){
       let status: Sim.Status = Constants.STATUS[key]
-      let validPlayer: Sim.Player | undefined = this.partyList.filter(p => p.job == status.job)[0]
+      let validPlayer: Sim.Player | undefined = this.partyList.filter(p => p.jobId == status.jobId)[0]
       if(validPlayer) validPlayer.statuses.push(status)
     }
-
     // Mitigation and healing for everyone
     this.partyList.forEach(p => {
       p.statuses.push(Constants.STATUS['galvanize']);
@@ -281,25 +304,52 @@ export class SimComponent implements OnInit, OnDestroy {
 
   assignVowDebuffs(): void {
     // Main tank will always have the vow
-    var mainTank: Sim.Player | undefined = this.partyList.find(p => p.job == 'WAR');
+    var mainTank: Sim.Player | undefined = this.partyList.find(p => (p.subRole == Constants.SUBROLE['tank'] && p.group == 1));
     if(mainTank) mainTank.statuses.push(Constants.STATUS['vow']);
     // The vow could have been passed to the MT by any DPS player
-    var dpsPlayers: Sim.Player[] = this.partyList.filter(p => Constants.DPS_JOBS.includes(p.job))
+    var dpsPlayers: Sim.Player[] = this.partyList.filter(p => p.subRole.role == Constants.ROLE['DPS'])
     this.assignStatusesToUniquePlayers([Constants.STATUS['vowPassed']], dpsPlayers);
   }
   /* #endregion */
 
   /* #region Local storage */
+  saveCustomPartyData(): void {
+    // NEW VERSION
+    const partyData: Sim.CustomPartyData[] = []
+    this.partyList.forEach(p => {
+      let customData: Sim.CustomPartyData = {
+        playerId: p.id,
+        name: p.name,
+        jobId: p.jobId
+      }
+      partyData.push(customData)
+    })
+    this.localStorageService.setItem(Constants.LOCAL_STORAGE_KEY['partyListData'], partyData)
+  }
+  loadCustomPartyData(): void {
+    // NEW VERSION
+    const customData: Sim.CustomPartyData[] | null = this.localStorageService.getItem<Sim.CustomPartyData[]>(
+      Constants.LOCAL_STORAGE_KEY['partyListData']
+    )
+    customData?.forEach(data => {
+      let player: Sim.Player | undefined = this.partyList.find(p => p.id == data.playerId)
+      if(player) {
+        player.name = data.name
+        player.jobId = data.jobId
+      }
+    })
+  }
   savePartyListNames(): void {
+    // OLD, DEPRECATING
     const customNames: Sim.CustomName[] = []
     this.partyList.forEach(p => {
       var name: Sim.CustomName = {id: p.id, name: p.name}
       customNames.push(name)
     })
-
     this.localStorageService.setItem(Constants.LOCAL_STORAGE_KEY['partyListNames'], customNames)
   }
   loadPartyListNames(): void {
+    // OLD, DEPRECATING
     const customNames: Sim.CustomName[] | null = this.localStorageService.getItem<Sim.CustomName[]>(
       Constants.LOCAL_STORAGE_KEY['partyListNames']
     )
@@ -312,8 +362,6 @@ export class SimComponent implements OnInit, OnDestroy {
   }
   savePartyListOrder(): void {
     const partyListOrder: number[] = this.partyList.map(p => p.id)
-    const jobList: string[] = this.partyList.map(p => p.job)
-
     this.localStorageService.setItem(Constants.LOCAL_STORAGE_KEY['partyListOrder'], partyListOrder)
   }
   getPartyListOrder(): number[] | null {
