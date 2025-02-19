@@ -63,6 +63,7 @@ export class SimComponent implements OnInit, OnDestroy {
 
   /* #region Component logic */
   randomizePartyState(): void {
+    this.resetPartyStatuses()
     this.assignWrothDebuffs()
     this.assignVowDebuffs()
     this.assignAdditionalStatuses()
@@ -232,13 +233,17 @@ export class SimComponent implements OnInit, OnDestroy {
       if(savedOrder) {
         savedOrder.forEach((id, index) => {
           // Reorder based on player preferences in local storage
-          this.partyList[index] = this.clone(baseData.find((p: Sim.Player) => p.id == id))
+          let basePlayer: Sim.Player | undefined = baseData.find((p: Sim.Player) => p.id == id)
+          this.partyList[index] = this.clone(basePlayer)
         })
       } else {
-        // Get a straight fresh clone of the base data
+        // Get a straight fresh clone of the base data, no re-ordering
         this.partyList = baseData
       }
     }
+  }
+
+  resetPartyStatuses(): void {
     this.partyList.forEach(p => { p.statuses = []})
   }
 
