@@ -4,7 +4,6 @@
     border-radius: 4px;
     display: block;
     margin-top: 5px;
-    z-index: 2;
 }
 
 /* #region Party list header */
@@ -70,8 +69,8 @@
 }
 .aggro-a {
     position: absolute;
-   font-size: 24pt;
-   left: -9px;
+    font-size: 24pt;
+    left: -9px;
 }
 .aggro, .health, .mana, .mana-decimal {
     font-family: "Michroma", serif;
@@ -82,7 +81,7 @@
     top: 12px;
     width: 124px;
     text-align: right;
-    z-index: 2;
+    z-index: 1;
 }
 .aggro {
     text-align: left;
