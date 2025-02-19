@@ -14,10 +14,10 @@ export const SUBROLE: {[index:string]: SubRole} = {
     'prange': { id: 4, name: 'physrange', shortName: 'r', role: ROLE['dps'] }
 }
 export const STATUS:{[index: string]:Status} = {
-    'wrothSpread':  {id: 0,  jobId: 0,  duration: 23, applyTo: 'party',      shortName: 'wrothSpread', name: 'spread' },
-    'wrothStack':   {id: 1,  jobId: 0,  duration: 23, applyTo: 'party',      shortName: 'wrothStack',  name: 'stack' },
-    'vow':          {id: 2,  jobId: 0,  duration: 30, applyTo: 'party',      shortName: 'vow',         name: 'vow' },
-    'vowPassed':    {id: 3,  jobId: 0,  duration: 60, applyTo: 'party',      shortName: 'vowPassed',   name: 'passed vow' },
+    'wrothSpread':  {id: 0,  jobId: -1,  duration: 23, applyTo: 'party',      shortName: 'wrothSpread', name: 'spread' },
+    'wrothStack':   {id: 1,  jobId: -1,  duration: 23, applyTo: 'party',      shortName: 'wrothStack',  name: 'stack' },
+    'vow':          {id: 2,  jobId: -1,  duration: 30, applyTo: 'party',      shortName: 'vow',         name: 'vow' },
+    'vowPassed':    {id: 3,  jobId: -1,  duration: 60, applyTo: 'party',      shortName: 'vowPassed',   name: 'passed vow' },
   
     // Self buffs and role buffs first so they get rendered first on the list
     'storm':        {id: 9,  jobId: 3,  duration: 48, applyTo: 'self',       shortName: 'storm',       name: 'storm\'s eye' },

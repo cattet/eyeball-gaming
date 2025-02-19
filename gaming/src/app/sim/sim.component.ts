@@ -62,21 +62,6 @@ export class SimComponent implements OnInit, OnDestroy {
   }
 
   /* #region Component logic */
-  tryLoadPartyListData() {
-    // This is temporary and should be replaced with just this.loadPartyListData() later
-    const oldDataExists: Sim.CustomName[] | null = this.localStorageService.getItem<Sim.CustomName[]>(Constants.LOCAL_STORAGE_KEY['partyListNames'])
-    if(oldDataExists) {
-      // Load the old data
-      this.loadPartyListNames()
-      // Save it into the new data structure
-      this.saveCustomPartyData()
-      // Clear the old data so we don't do this again
-      this.localStorageService.removeItem(Constants.LOCAL_STORAGE_KEY['partyListNames'])
-    } else {
-      this.loadCustomPartyData()
-    }
-  }
-
   randomizePartyState(): void {
     this.assignWrothDebuffs()
     this.assignVowDebuffs()
@@ -324,6 +309,20 @@ export class SimComponent implements OnInit, OnDestroy {
   /* #endregion */
 
   /* #region Local storage */
+  tryLoadPartyListData() {
+    // This is temporary and should be replaced with just this.loadPartyListData() later
+    const oldDataExists: Sim.CustomName[] | null = this.localStorageService.getItem<Sim.CustomName[]>(Constants.LOCAL_STORAGE_KEY['partyListNames'])
+    if(oldDataExists) {
+      // Load the old data
+      this.loadPartyListNames()
+      // Save it into the new data structure
+      this.saveCustomPartyData()
+      // Clear the old data so we don't do this again
+      this.localStorageService.removeItem(Constants.LOCAL_STORAGE_KEY['partyListNames'])
+    } else {
+      this.loadCustomPartyData()
+    }
+  }
   saveCustomPartyData(): void {
     // NEW VERSION
     const partyData: Sim.CustomPartyData[] = []
