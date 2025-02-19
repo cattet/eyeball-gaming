@@ -38,9 +38,10 @@ export interface SubRole {
 }
 export interface Status {
     id: number
-    name: string
-    jobId: number | null // This refers to the job of the player affected by the status
-    iconUrl: string
+    name: string,
+    shortName: string,
+    jobId: number,
+    applyTo: 'party' | 'self' | Role
     duration: number
 }
 export interface CustomName {

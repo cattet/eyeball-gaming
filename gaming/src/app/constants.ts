@@ -1,40 +1,42 @@
 import { Job, Player, Role, Status, SubRole } from './interfaces'
 
 /* #region Constants */
-export const STATUS:{[index: string]:any} = {
-    'wrothSpread':  {id: 0, name: 'spread', job: null, iconUrl: 'assets/p6/spread.png', duration: 23 },
-    'wrothStack':   {id: 1, name: 'stack', job: null, iconUrl: 'assets/p6/stack.png', duration: 23 },
-    'vow':          {id: 2, name: 'vow', job: null, iconUrl: 'assets/p6/vow.png', duration: 30 },
-    'vowPassed':    {id: 3, name: 'passed vow', job: null, iconUrl: 'assets/p6/vow-passed.png', duration: 60 },
-  
-    'galvanize':    {id: 4, name: 'galvanize', job: null, iconUrl: 'assets/status/galvanize.png', duration: 27 },
-    'veil':         {id: 5, name: 'divine veil', job: null, iconUrl: 'assets/status/veil.png', duration: 24 },
-    'tempera':      {id: 6, name: 'tempera grassa', job: null, iconUrl: 'assets/status/tempera.png', duration: 10 },
-    'medica':       {id: 7, name: 'medica 2', job: null, iconUrl: 'assets/status/medica.png', duration: 13 },
-    'tactician':    {id: 8, name: 'tactician', job: null, iconUrl: 'assets/status/tactician.png', duration: 14 },
-  
-    'storm':        {id: 9, name: 'storm\'s eye', job: 'WAR', iconUrl: 'assets/status/storm.png', duration: 48 },
-    'benison':      {id: 10, name: 'divine benison', job: 'WAR', iconUrl: 'assets/status/benison.png', duration: 8 },
-    'flight':       {id: 11, name: 'everlasting flight', job: 'PLD', iconUrl: 'assets/status/flight.png', duration: 20 },
-    'catalyze':     {id: 12, name: 'catalyze', job: 'SCH', iconUrl: 'assets/status/catalyze.png', duration: 27 },
-    'rekindle':     {id: 13, name: 'rekindle', job:  'SMN', iconUrl: 'assets/status/rekindle.png', duration: 29 },
-    'aegis':        {id: 14, name: 'radiant aegis', job:  'SMN', iconUrl: 'assets/status/aegis.png', duration: 23 },
-    'hammer3':      {id: 15, name: 'hammer 3', job:  'PCT', iconUrl: 'assets/status/hammer3.png', duration: 27 }
-} as const
-export const DPS_JOBS: string[] = ['MCH', 'DRG', 'SMN', 'PCT'] as const // TODO
-
 export const ROLE: {[index:string]: Role} = {
     'tank': { id: 0, name: 'tank' },
     'healer': { id: 1, name: 'healer' },
-    'DPS': { id: 2, name: 'DPS' }
+    'dps': { id: 2, name: 'dps' }
 } as const
 export const SUBROLE: {[index:string]: SubRole} = {
     'tank': { id: 0, name: 'tank', shortName: 't', role: ROLE['tank'] },
     'healer': { id: 1, name: 'healer', shortName: 'h', role: ROLE['healer'] },
-    'melee': { id: 2, name: 'melee', shortName: 'm', role: ROLE['DPS'] },
-    'caster': { id: 3, name: 'caster', shortName: 'r', role: ROLE['DPS'] },
-    'prange': { id: 4, name: 'physrange', shortName: 'r', role: ROLE['DPS'] }
+    'melee': { id: 2, name: 'melee', shortName: 'm', role: ROLE['dps'] },
+    'caster': { id: 3, name: 'caster', shortName: 'r', role: ROLE['dps'] },
+    'prange': { id: 4, name: 'physrange', shortName: 'r', role: ROLE['dps'] }
 }
+export const STATUS:{[index: string]:Status} = {
+    'wrothSpread':  {id: 0,  jobId: 0,  duration: 23, applyTo: 'party',      shortName: 'wrothSpread', name: 'spread' },
+    'wrothStack':   {id: 1,  jobId: 0,  duration: 23, applyTo: 'party',      shortName: 'wrothStack',  name: 'stack' },
+    'vow':          {id: 2,  jobId: 0,  duration: 30, applyTo: 'party',      shortName: 'vow',         name: 'vow' },
+    'vowPassed':    {id: 3,  jobId: 0,  duration: 60, applyTo: 'party',      shortName: 'vowPassed',   name: 'passed vow' },
+  
+    // Self buffs and role buffs first so they get rendered first on the list
+    'storm':        {id: 9,  jobId: 3,  duration: 48, applyTo: 'self',       shortName: 'storm',       name: 'storm\'s eye' },
+    'catalyze':     {id: 12, jobId: 5,  duration: 27, applyTo: 'self',       shortName: 'catalyze',    name: 'catalyze' },
+    'rekindle':     {id: 13, jobId: 17, duration: 29, applyTo: 'self',       shortName: 'rekindle',    name: 'rekindle' },
+    'aegis':        {id: 14, jobId: 17, duration: 23, applyTo: 'self',       shortName: 'aegis',       name: 'radiant aegis' },
+    'hammer3':      {id: 15, jobId: 15, duration: 27, applyTo: 'self',       shortName: 'hammer3',     name: 'hammer 3' },
+
+    // Role buffs (for tanks, for DPS, etc)
+    'benison':      {id: 10, jobId: 7,  duration: 8,  applyTo: ROLE['tank'], shortName: 'benison',     name: 'divine benison' },
+    'flight':       {id: 11, jobId: 17, duration: 20, applyTo: ROLE['tank'], shortName: 'flight',      name: 'everlasting flight' },
+
+    // Party mitigation
+    'galvanize':    {id: 4,  jobId: 5,  duration: 27, applyTo: 'party',      shortName: 'galvanize',   name: 'galvanize' },
+    'veil':         {id: 5,  jobId: 2,  duration: 24, applyTo: 'party',      shortName: 'veil',        name: 'divine veil' },
+    'tempera':      {id: 6,  jobId: 15, duration: 10, applyTo: 'party',      shortName: 'tempera',     name: 'tempera grassa' },
+    'medica':       {id: 7,  jobId: 7,  duration: 13, applyTo: 'party',      shortName: 'medica',      name: 'medica 2' },
+    'tactician':    {id: 8,  jobId: 20, duration: 14, applyTo: 'party',      shortName: 'tactician',   name: 'tactician' }
+} as const
 export const WROTH_DEBUFFS: Status[] = [ 
     STATUS['wrothSpread'], STATUS['wrothSpread'], STATUS['wrothSpread'], STATUS['wrothSpread'], STATUS['wrothStack'], STATUS['wrothStack']
 ] as const

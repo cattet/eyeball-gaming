@@ -282,20 +282,31 @@ export class SimComponent implements OnInit, OnDestroy {
   }
 
   assignAdditionalStatuses(): void {
-    // Personal statuses
+    let partyJobs: number[] = this.partyList.map(p => p.jobId)
+
     for(let key in Constants.STATUS){
       let status: Sim.Status = Constants.STATUS[key]
-      let validPlayer: Sim.Player | undefined = this.partyList.filter(p => p.jobId == status.jobId)[0]
-      if(validPlayer) validPlayer.statuses.push(status)
+      let statusValidForPartyComposition: boolean = partyJobs.includes(status.jobId)
+      if(statusValidForPartyComposition) {
+        switch(status.applyTo) {
+          case 'party': 
+            // Party mitigation
+            this.partyList.forEach(p => { p.statuses.push(status) })
+            break
+          case 'self': 
+            // Self buff
+            let self: Sim.Player | undefined = this.partyList.find(p => p.jobId == status.jobId)
+            self?.statuses.push(status)
+            break
+          default:
+            // Role-based application ("tanks")
+            let role: Sim.Role = status.applyTo
+            let playersInRole: Sim.Player[] = this.partyList.filter(p => p.subRole.role.id == role.id)
+            playersInRole[0]?.statuses.push(status) // Give the buff to the first in line in the role
+            break
+        }
+      }
     }
-    // Mitigation and healing for everyone
-    this.partyList.forEach(p => {
-      p.statuses.push(Constants.STATUS['galvanize']);
-      p.statuses.push(Constants.STATUS['veil']);
-      p.statuses.push(Constants.STATUS['tempera']);
-      p.statuses.push(Constants.STATUS['medica']);
-      p.statuses.push(Constants.STATUS['tactician']);
-    });
   }
 
   assignWrothDebuffs(): void {
@@ -304,10 +315,10 @@ export class SimComponent implements OnInit, OnDestroy {
 
   assignVowDebuffs(): void {
     // Main tank will always have the vow
-    var mainTank: Sim.Player | undefined = this.partyList.find(p => (p.subRole == Constants.SUBROLE['tank'] && p.group == 1));
+    var mainTank: Sim.Player | undefined = this.partyList.find(p => (p.subRole.role.id == Constants.ROLE['tank'].id && p.group == 1));
     if(mainTank) mainTank.statuses.push(Constants.STATUS['vow']);
     // The vow could have been passed to the MT by any DPS player
-    var dpsPlayers: Sim.Player[] = this.partyList.filter(p => p.subRole.role == Constants.ROLE['DPS'])
+    var dpsPlayers: Sim.Player[] = this.partyList.filter(p => p.subRole.role.id == Constants.ROLE['dps'].id)
     this.assignStatusesToUniquePlayers([Constants.STATUS['vowPassed']], dpsPlayers);
   }
   /* #endregion */

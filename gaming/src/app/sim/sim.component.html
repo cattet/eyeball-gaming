@@ -49,10 +49,10 @@
                     <span class="player glow-shadow">{{player.name}}</span>
 
                     <span class="statuses">
-                        @for (status of player.statuses; track status.id; let index = $index) {
+                        @for (status of player.statuses; track status; let index = $index) {
                             <xiv-status
                                 [class]="{'status-hide': index >= 5}" 
-                                [iconUrl]="status.iconUrl" 
+                                [iconUrl]="'assets/status/'+status.shortName+'.png'" 
                                 [maxDuration]="status.duration"
                                 [resetListener]="statusResetEmitter"
                                 (expire)="onStatusExpire($event, player.id, status.id)"></xiv-status>

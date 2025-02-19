@@ -2,7 +2,6 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Player } from '../interfaces';
-import { BASE_PLAYER_DATA } from '../constants';
 
 @Component({
   selector: 'solution-group',

@@ -2,7 +2,7 @@
     <span class="solution" [class]="{ 'visible': showSolution }">
         <span class="explanation">
             @for (status of players[0].statuses; track status.id) {
-                <img class="status" *ngIf="status.name == 'spread'" [src]="status.iconUrl" />
+                <img class="status" *ngIf="status.name == 'spread'" [src]="'assets/status/'+status.shortName+'.png'" />
             }
             <span class="role">{{players[0].subRole.shortName}}{{players[0].group}}</span>
         </span>
@@ -16,7 +16,7 @@
     <span class="solution" [class]="{ 'visible': showSolution }">
         <span class="explanation">
             @for (status of players[0].statuses; track status.id) {
-                <img class="status" *ngIf="status.name == 'stack'" [src]="status.iconUrl" />
+                <img class="status" *ngIf="status.name == 'stack'" [src]="'assets/status/'+status.shortName+'.png'" />
             }
             <span class="role">{{players[0].subRole.shortName}}{{players[0].group}}</span>
         </span>
