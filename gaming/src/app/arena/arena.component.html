@@ -1,6 +1,11 @@
 <div class="content">
     <div class="arena-background" (click)="selectedLoat = 0" style="background-image: url('assets/arena/dsu-arena.png')"></div>
 
+    <div class="hawt-wings" *ngIf="showHotWings">
+        <div class="wing north-wing"></div>
+        <div class="wing south-wing"></div>
+    </div>
+
     <div class="loat-container">
         <div class="nid" (click)="selectedLoat = 1" [class]="{ 'selected': selectedLoat == 1 }">
             <div class="loat-image" style="background-image: url('assets/boss/pickaso.png')"></div>
@@ -14,7 +19,7 @@
         </div>
     </div>
 
-    <div class="waymark-container" *ngIf="showWaymarks">
+    <div class="waymark-container" [class]="{ 'visible': showWaymarks }">
         <div class="waymark waymark-1 red" style="background-image: url('assets/arena/waymark1.png')"></div>
         <div class="waymark waymark-A red circle" style="background-image: url('assets/arena/waymarkA.png')"></div>
         <div class="waymark waymark-3 blue" style="background-image: url('assets/arena/waymark3.png')"></div>
@@ -24,10 +29,11 @@
         <div class="waymark waymark-4 purple" style="background-image: url('assets/arena/waymark4.png')"></div>
         <div class="waymark waymark-D purple circle" style="background-image: url('assets/arena/waymarkD.png')"></div>
     </div>
-    
 
-    <!--<div class="hint">m2 &nbsp; m1 &nbsp; r2 &nbsp; r1 &nbsp; h2 &nbsp; h1 &nbsp; t2 &nbsp; t1</div>-->
-    <div class="settings"><mat-slide-toggle labelPosition="before" (click)="showWaymarks = !showWaymarks">waymarks</mat-slide-toggle></div>
+    <div>
+        <mat-slide-toggle class="settings settings-hotwings" labelPosition="before" [checked]="showHotWings" (click)="showHotWings = !showHotWings">hawt wings</mat-slide-toggle>
+        <mat-slide-toggle class="settings settings-waymarks" labelPosition="before" [checked]="showWaymarks" (click)="showWaymarks = !showWaymarks">waymarks</mat-slide-toggle>
+    </div>
 
     <div class="lineup">
         <table>

@@ -17,6 +17,25 @@
     background-repeat: no-repeat;
 }
 
+/* #region Hawt wings*/
+.wing {
+    position: absolute;
+    top: -105px;
+    left: 0;
+    width: 798px;
+    height: 200px;
+    border: 1px solid rgba(255, 236, 218, 1);
+    box-shadow:
+        inset 0 0 5px 1px rgb(255, 236, 218),
+        inset 0 0 20px 5px rgb(255, 179, 107),
+        inset 0 0 30px 10px rgb(255, 102, 0),
+        inset 0 0 200px 20px rgba(255, 0, 0, 0.25);
+}
+.wing.south-wing {
+    top: 403px;
+}
+/* #endregion */
+
 /* #region Waymarks */
 .waymark-container {
     position: absolute;
@@ -27,8 +46,12 @@
     position: absolute;
     width: 45px;
     height: 45px;
-    z-index: 1;
     background-size: contain;
+    z-index: 1;
+    opacity: 0;
+}
+.visible .waymark {
+    opacity: 1;
 }
 .waymark.circle {
     width: 48px;
@@ -60,12 +83,12 @@
     inset 0px 0px 2px 0px rgba(241, 207, 255, 0.3);
 }
 .waymark-1 {
-    top: 418px;
+    top: 419px;
     left: 50%;
     margin-left: -23px;
 }
 .waymark-A {
-    top: 34px;
+    top: 30px;
     left: 50%;
     margin-left: -25px;
 }
@@ -79,7 +102,7 @@
 }
 .waymark-2 {
     top: 495px;
-    right: 116px;
+    left: 116px;
 }
 .waymark-B {
     top: -40px;
@@ -91,7 +114,7 @@
 }
 .waymark-D {
     top: 495px;
-    left: 116px;
+    right: 116px;
 }
 /* #region Loat images and containers */
 .loat-container {
@@ -114,7 +137,7 @@
 }
 .loat-image {
     position: absolute;
-    top: -25px;
+    top: -35px;
     width: 450px;
     height: 450px;
     background-position-x: center;
@@ -202,5 +225,8 @@
     position: absolute;
     top: 464px;
     right: 4px;
+}
+.settings-hotwings {
+    top: 430px;
 }
 /* #endregion */

@@ -17,13 +17,14 @@ import { SolutionGroupComponent } from "../solution-group/solution-group.compone
   ]
 })
 export class ArenaComponent implements OnInit {
-  @Input() selectedPlayer: number = 0;
+  @Input() selectedPlayer: number = 0
   @Input() solvedPlayers: Sim.Player[] = []
   @Input() resetListener: EventEmitter<boolean> = new EventEmitter()
-  public showSolution: boolean = false;
-  public selectedLocation: number = 0;
-  public selectedLoat: number = 1;
-  public showWaymarks: boolean = false;
+  public showSolution: boolean = false
+  public selectedLocation: number = 0
+  public selectedLoat: number = 1
+  public showWaymarks: boolean = false
+  public showHotWings: boolean = true
 
   ngOnInit(): void {
     if(this.resetListener){
