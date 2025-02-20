@@ -116,6 +116,8 @@
     top: 495px;
     right: 116px;
 }
+/* #endregion */
+
 /* #region Loat images and containers */
 .loat-container {
     position: absolute;
@@ -194,7 +196,7 @@
 }
 /* #endregion */
 
-/* #region Party */
+/* #region Party lineup */
 .lineup {
     position: relative;
     width: 800px;
@@ -210,7 +212,7 @@
 .lineup table {
     position: relative;
     width: 860px;
-    left: -80px;
+    left: -48px;
 }
 .lineup table td {
     text-align: center;
