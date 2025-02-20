@@ -1,15 +1,21 @@
 li {
     position: relative;
 }
+li p {
+    margin-top: 8px;
+    margin-bottom: 16px;
+}
 img.status {
     position: absolute;
     width: 18px;
     top: -4px;
     margin-left: 5px;
 }
+.faq-chip {
+    margin: 0 5px;
+}
 .icon-chip {
     padding-left: 16px;
-    margin: 0 5px;
 }
 .small-icon {
     position: absolute;
