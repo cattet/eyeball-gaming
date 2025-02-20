@@ -13,10 +13,10 @@
     width: 200px;
     border-radius: 50%;
     cursor: pointer;
-    z-index: 1;
+    z-index: 0;
 }
 .aoe.selected {
-    z-index: 0;
+    z-index: 1;
 }
 .aoe.spread {
     background-color: rgba(147, 37, 113, 0.3);
@@ -49,7 +49,7 @@
     display: block;
     position: relative;
     margin: 0 auto;
-    top: 77px;
+    top: 78px;
     left: 0;
     width: 40px;
 }
@@ -62,6 +62,67 @@
 }
 /* #endregion */
 
+/* #region Alternate style */
+.aoe.spread {
+    border: 3px solid rgba(80, 10, 58, 1);
+    background: none;
+    box-shadow:
+        inset 0 0 5px 3px rgba(80, 10, 58, 0.25),
+        inset 0 0 20px 5px rgba(145, 19, 105, 0.25),
+        inset 0 0 30px 10px rgba(180, 43, 137, 0.25),
+        inset 0 0 200px 20px rgba(80, 10, 58, 0.1);
+}
+.aoe.spread:hover {
+    border: 3px solid rgba(80, 10, 58, 1);
+    background: rgba(147, 37, 113, 0.4);
+    box-shadow:
+        inset 0 0 5px 3px rgba(80, 10, 58, 0.25),
+        inset 0 0 20px 5px rgba(145, 19, 105, 0.25),
+        inset 0 0 30px 10px rgba(180, 43, 137, 0.25),
+        inset 0 0 200px 20px rgba(80, 10, 58, 0.3),
+        0px 3px 5px 1px #222;
+}
+.aoe.spread.selected {
+    border: 3px solid rgb(54, 4, 38);
+    background: rgba(147, 37, 113, 0.9);
+    box-shadow:
+        inset 0 0 5px 3px rgba(54, 4, 38, 1),
+        inset 0 0 20px 5px rgba(145, 19, 105, 1),
+        inset 0 0 30px 10px rgba(180, 43, 137, 1),
+        inset 0 0 200px 20px rgba(80, 10, 58, 0.25),
+        0px 5px 5px 1px #222;
+}
+.aoe.stack {
+    border: 3px solid rgba(237, 248, 255, 1);
+    background: none;
+    box-shadow:
+        inset 0 0 5px 3px rgba(237, 248, 255, 0.25),
+        inset 0 0 20px 5px rgba(157, 194, 216, 0.25),
+        inset 0 0 30px 10px rgba(152, 213, 248, 0.25),
+        inset 0 0 200px 20px rgba(157, 194, 216, 0.1);
+}
+.aoe.stack:hover {
+    border: 3px solid rgba(237, 248, 255, 1);
+    background: rgba(157, 194, 216, 0.4);
+    box-shadow:
+        inset 0 0 5px 3px rgba(237, 248, 255, 0.25),
+        inset 0 0 20px 5px rgba(157, 194, 216, 0.25),
+        inset 0 0 30px 10px rgba(152, 213, 248, 0.25),
+        inset 0 0 200px 20px rgba(157, 194, 216, 0.3),
+        0px 3px 5px 1px #222;
+}
+.aoe.stack.selected {
+    border: 3px solid rgba(237, 248, 255, 1);
+    background: rgba(157, 194, 216, 0.9);
+    box-shadow:
+        inset 0 0 5px 3px rgba(237, 248, 255, 1),
+        inset 0 0 20px 5px rgba(157, 194, 216, 1),
+        inset 0 0 30px 10px rgba(152, 213, 248, 1),
+        inset 0 0 200px 20px rgba(157, 194, 216, 0.25),
+        0px 5px 5px 1px #222;
+}
+/* #endregion */
+
 /* #region Explanation text and status */
 .explanation {
     font-family: "Roboto Mono", monospace;
@@ -70,7 +131,7 @@
     width: 45px;
     text-align: center;
     height: 0;
-    top: 45px;
+    top: 46px;
     left: 76px;
 }
 img.status {
