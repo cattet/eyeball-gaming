@@ -67,6 +67,32 @@
     width: 40px;
     top: 0px;
 }
+.lead {
+    position: absolute;
+    top: -2px;
+    left: -7px;
+}
+.outer, .inner {
+    filter: drop-shadow(0px 0px 4px rgb(46, 95, 255));
+}
+.outer {
+    width: 12px;
+    height: 12px; 
+    border: 3px solid var(--mat-sys-on-background);
+    border-top: none;
+    border-right: none;
+    border-radius: 2px;
+    box-shadow: 0px 2px 5px black,  0px 0px 3px black;
+}
+.inner {
+    position: relative;
+    top: -15px;
+    left: 6px;
+    width: 9px;
+    height: 9px;
+    border-radius: 1px;
+    background: var(--mat-sys-on-background);
+}
 .aggro-a {
     position: absolute;
     font-size: 24pt;
