@@ -20,6 +20,7 @@ export const STATUS:{[index: string]:Status} = {
     'vowPassed':    {id: 3,  jobId: -1,  duration: 60, applyTo: 'party',      shortName: 'vowPassed',   name: 'passed vow' },
   
     // Self buffs and role buffs first so they get rendered first on the list
+    'defiance':     {id: 16, jobId: 3,  duration: -1, applyTo: 'self',       shortName: 'defiance',    name: 'defiance' },
     'storm':        {id: 9,  jobId: 3,  duration: 48, applyTo: 'self',       shortName: 'storm',       name: 'storm\'s eye' },
     'catalyze':     {id: 12, jobId: 5,  duration: 27, applyTo: 'self',       shortName: 'catalyze',    name: 'catalyze' },
     'rekindle':     {id: 13, jobId: 17, duration: 29, applyTo: 'self',       shortName: 'rekindle',    name: 'rekindle' },

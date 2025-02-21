@@ -36,8 +36,11 @@ export class xivStatusComponent implements OnInit, OnDestroy {
     this.timerId = setInterval(() => {
       if(this.duration > 0) {
         this.duration--
-      } else {
+      } else if(this.duration == 0) {
         this.expire.emit(true)
+      } else {
+        // This is a persistent status that starts at -1
+        // (things like tank stance)
       }
     }, 1000)
   }
