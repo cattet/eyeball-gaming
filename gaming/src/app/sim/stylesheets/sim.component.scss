@@ -1,3 +1,6 @@
+.top-nav {
+    width: 1450px;
+}
 .filler {
     flex: 1 1 auto;
 }
@@ -7,7 +10,9 @@
 .glow-shadow {
     text-shadow: 0px 0px 5px rgb(131, 189, 255), 0px 0px 4px rgb(46, 95, 255), 0px 2px 5px black,  0px 0px 3px black, 0px 2px 2px black;
 }
-
+.glow-graphic {
+    filter: drop-shadow(0px 0px 2px rgb(131, 189, 255)) drop-shadow(0px 0px 1px rgb(46, 95, 255));
+}
 
 /* #region(c) Containers */
 .page {

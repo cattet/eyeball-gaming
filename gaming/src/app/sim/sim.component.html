@@ -1,4 +1,4 @@
-<mat-toolbar>
+<mat-toolbar class="top-nav">
     <span class="title">wroth flames helper</span>
 
     <span class="filler"></span>
@@ -46,7 +46,7 @@
                             <div class="outer glow-graphic"></div>
                             <div class="inner glow-graphic"></div>
                         </span>
-                        <span class="health-triangle glow-shadow" *ngIf="player.healthPercent < 0.99">🞃</span>
+                        <span class="health-triangle glow-graphic" *ngIf="player.healthPercent < 0.99"></span>
                         <span class="health glow-shadow">{{player.healthPercent * player.maxHealth | number:'1.0-0' | xivNumber}}</span>
                         <span class="mana glow-shadow">{{player.manaPercent * 100 | number:'1.0-0' | xivNumber}}</span>
                         <span class="mana-decimal glow-shadow">{{ player.manaPercent * 100 | number:'1.2-2' | xivDecimal }}</span>
