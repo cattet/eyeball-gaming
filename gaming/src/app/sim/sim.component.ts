@@ -1,4 +1,4 @@
-/* #region Imports */
+/* #region(c) Imports */
 import { CommonModule } from '@angular/common'
 import { Component, EventEmitter, OnDestroy, OnInit, inject } from '@angular/core'
 import { Event } from '@angular/router'
@@ -17,12 +17,12 @@ import { CdkDragDrop, CdkDrag, CdkDropList, CdkDropListGroup, moveItemInArray, t
 import { LocalStorageService } from '../services/local-storage.service'
 import { xivNumberPipe } from './pipes/xivnumber.pipe'
 import { xivDecimalPipe } from './pipes/xivdecimal.pipe'
-import { ArenaComponent } from '../arena/arena.component'
-import { EditPartyComponent } from '../edit-party/edit-party.component'
-import { xivStatusComponent } from '../xiv-status/xiv-status.component'
+import { ArenaComponent } from '../components/arena/arena.component'
+import { EditPartyComponent } from '../components/edit-party/edit-party.component'
+import { xivStatusComponent } from '../components/xiv-status/xiv-status.component'
 import * as Constants from '../constants'
 import * as Sim from '../interfaces'
-import { FaqComponent } from '../faq/faq.component'
+import { FaqComponent } from '../components/faq/faq.component'
 /* #endregion */
 
 @Component({
@@ -61,7 +61,7 @@ export class SimComponent implements OnInit, OnDestroy {
     this.resetAkhMornTimer()
   }
 
-  /* #region Component logic */
+  /* #region(c) Component logic */
   randomizePartyState(): void {
     this.resetPartyStatuses()
     this.assignWrothDebuffs()
@@ -142,7 +142,7 @@ export class SimComponent implements OnInit, OnDestroy {
   }
   /* #endregion */
 
-  /* #region Component logic helpers */
+  /* #region(c) Component logic helpers */
   getShieldOverflowPercent(p: Sim.Player): number {
     let shieldOverflowPercent: number = 0
     let currentHealth: number = p.healthPercent * p.maxHealth
@@ -313,7 +313,7 @@ export class SimComponent implements OnInit, OnDestroy {
   }
   /* #endregion */
 
-  /* #region Local storage */
+  /* #region(c) Local storage */
   tryLoadPartyListData() {
     // This is temporary and should be replaced with just this.loadPartyListData() later
     const oldDataExists: Sim.CustomName[] | null = this.localStorageService.getItem<Sim.CustomName[]>(Constants.LOCAL_STORAGE_KEY['partyListNames'])
@@ -397,7 +397,7 @@ export class SimComponent implements OnInit, OnDestroy {
   }
   /* #endregion */
 
-  /* #region Event handlers and emitters */
+  /* #region(c) Event handlers and emitters */
   openEditDialog(): void {
     const dialogRef = this.dialog.open(EditPartyComponent, {
       data: { 
@@ -444,7 +444,7 @@ export class SimComponent implements OnInit, OnDestroy {
   }
   /* #endregion */
 
-  /* #region Generic helpers */
+  /* #region(c) Generic helpers */
   getRandomPercent(min: number, max: number): number {
     var percent: number = (Math.floor(Math.random() * (max - min + 1)) + min) / 100;
     if(percent > .95) percent = 1 // Almost full bars don't look good

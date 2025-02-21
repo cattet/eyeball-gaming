@@ -1,0 +1,6 @@
+{
+    "maptz.regionfolder": {
+        "defaultFoldStartRegex": "\\<!--[\\s]*#region\\(c\\)[\\s]*(.*)",
+        "maptz.regionfolder.collapseDefaultRegionsOnOpen": true
+    }
+}

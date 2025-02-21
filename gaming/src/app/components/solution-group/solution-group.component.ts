@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { Player } from '../interfaces';
+import { Player } from '../../interfaces';
 
 @Component({
   selector: 'solution-group',

@@ -7,8 +7,8 @@ import { MatSelectChange, MatSelectModule } from '@angular/material/select'
 import { MatIconModule } from '@angular/material/icon'
 import { MatInputModule } from '@angular/material/input'
 import {FormsModule} from '@angular/forms'
-import * as Sim from '../interfaces'
-import { JOBS } from '../constants'
+import * as Sim from '../../interfaces'
+import { JOBS } from '../../constants'
 
 
 @Component({

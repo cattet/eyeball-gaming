@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon'
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
-import * as Sim from '../interfaces'
+import * as Sim from '../../interfaces'
 import { SolutionGroupComponent } from "../solution-group/solution-group.component";
 
 

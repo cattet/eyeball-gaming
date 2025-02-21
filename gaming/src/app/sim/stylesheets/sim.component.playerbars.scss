@@ -1,6 +1,6 @@
 @use '@angular/material' as mat;
 
-/* #region Player row bars */
+/* #region(c) Player row bars */
 .bar {
     display: inline-block;
     position: absolute;
@@ -108,7 +108,7 @@
 }
 /* #endregion */
 
-/* #region Player row icons and statuses */
+/* #region(c) Player row icons and statuses */
 .sync {
     position: relative;
     top: -8px;
